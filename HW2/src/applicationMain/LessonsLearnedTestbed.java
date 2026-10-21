@@ -6,11 +6,31 @@ import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * <p> Title: LessonsLearnedTestbed </p>
+ *
+ * <p> Description: A console test driver for the create, read, update, and delete (CRUD)
+ * operations that {@link database.Database} provides for {@link entityClasses.LessonsLearned}.
+ * It runs against an in-memory H2 database and prints a PASS or FAIL line per check, followed
+ * by a summary.</p>
+ *
+ * @author Harrison
+ * @version 2.0
+ */
+
 public class LessonsLearnedTestbed {
 	
     private static Database db;
     private static int passed = 0;
     private static int failed = 0;
+    
+    /**
+     * Connects to an in-memory database, runs the create, read, update, and delete tests,
+     * and prints the totals.
+     *
+     * @param args the command-line arguments (not used)
+     * @throws Exception if the database connection cannot be established or closed
+     */
 
     public static void main(String[] args) throws Exception {
         // Database reads this into a static final field when the class first loads,

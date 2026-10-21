@@ -1,6 +1,18 @@
 package applicationMain;
 import guiCreateLesson.ModelCreateLesson;
 
+/**
+ * <p> Title: LessonsLearnedValidation </p>
+ *
+ * <p> Description: A console-based, semi-automated test driver for the lesson title and text
+ * validators in {@link guiCreateLesson.ModelCreateLesson}. Each test case supplies an input,
+ * the type of input ({@code "title"} or {@code "text"}), and whether the input is expected to
+ * pass. The driver prints the result of every case followed by a pass/fail summary.</p>
+ *
+ * @author Harrison
+ * @version 2.0
+ */
+
 public class LessonsLearnedValidation {
 
 		static int numPassed = 0;	// Counter of the number of passed tests
@@ -13,6 +25,7 @@ public class LessonsLearnedValidation {
 		 * This mainline displays a header to the console, performs a sequence of
 		 * test cases, and then displays a footer with a summary of the results
 		 */
+		
 		public static void main(String[] args) {
 			/************** Test cases semi-automation report header **************/
 			System.out.println("______________________________________");
