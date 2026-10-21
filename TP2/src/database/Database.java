@@ -107,7 +107,40 @@ public class Database {
 		
 		// R: read lessons from the database
 		
-	//TP2: Changed both get methods to include whether or not the title is locked or unlocked
+		/**
+		 * Returns all lessons stored in the database.
+		 * This is used by the Curator because Curators can view
+		 * lessons created by all contributors.
+		 *
+		 * @return a collection containing all lessons in the database
+		 */
+		public LessonsLearnedCollection getAllLessons() {
+		    String query = "SELECT * FROM lessons";
+		    LessonsLearnedCollection lessonList = new LessonsLearnedCollection();
+
+		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+		        ResultSet rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            int id = rs.getInt("id");
+		            String author = rs.getString("author");
+		            String title = rs.getString("title");
+		            String text = rs.getString("text");
+
+		            LessonsLearned lesson =
+		                    new LessonsLearned(author, title, text, id);
+
+		            lessonList.addLesson(lesson);
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return lessonList;
+		}
+		
+	
 		
 		
 			/**
@@ -1447,9 +1480,9 @@ public class Database {
 	    	currentLastName = rs.getString(6);
 	    	currentPreferredFirstName = rs.getString(7);
 	    	currentEmailAddress = rs.getString(8);
-	    	currentAdminRole = rs.getBoolean(9);
-	    	currentContributorRole = rs.getBoolean(10);
-	    	currentCuratorRole = rs.getBoolean(11);
+	    	currentAdminRole = rs.getBoolean("adminRole");
+	    	currentContributorRole = rs.getBoolean("contributorRole");
+	    	currentCuratorRole = rs.getBoolean("curatorRole");
 	    	currentIsOneTimePassword = rs.getBoolean("isOneTimePassword");
 			return true;
 	    } catch (SQLException e) {
