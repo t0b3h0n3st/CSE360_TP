@@ -1,9 +1,25 @@
 package guiViewLesson;
 
+/**
+ * <p> Title: ModelViewLesson </p>
+ *
+ * <p> Description: The model for the View / Edit Lesson page. It provides the same title and
+ * text validation rules used when creating a lesson. An empty string returned from a
+ * validator means the input is valid.</p>
+ *
+ * @version 2.0
+ * @see ControllerViewLesson
+ * @see ViewViewLesson
+ */
+
 public class ModelViewLesson {
-	/** 
-	 * validation for title:
-	 * @return
+	/**
+	 * Validates the title of a lesson. A title is valid when it is not null or blank, is at
+	 * most 100 characters long, and fits on a single line (contains no newline).
+	 *
+	 * @param input the title entered by the user
+	 * @return an empty string if the title is valid; otherwise a message describing the
+	 *         first rule that was violated
 	 */
 	public static String validateTitle(String input) {
 		final int MAX_LENGTH = 100;
@@ -27,6 +43,15 @@ public class ModelViewLesson {
 		return msg;
 	}
 	
+	
+	/**
+	 * Validates the body text of a lesson. The text is valid when it is not null or blank and
+	 * its length is between 10 and 255 characters inclusive.
+	 *
+	 * @param input the lesson text entered by the user
+	 * @return an empty string if the text is valid; otherwise a message describing the
+	 *         first rule that was violated
+	 */
 	public static String validateText(String input) {
 		final int MAX_LENGTH = 255;
 		final int MIN_LENGTH = 10; // should at least be 10 chars

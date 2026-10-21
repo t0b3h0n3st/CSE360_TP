@@ -18,6 +18,19 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
 
+/**
+ * <p> Title: ViewViewLesson </p>
+ *
+ * <p> Description: The JavaFX view for the View / Edit Lesson page. It shows the title and
+ * text of one lesson in editable fields, with buttons to save edits and to return. Curators
+ * additionally see buttons to lock or unlock the title and description. A locked field is
+ * read-only for the lesson's original author.</p>
+ *
+ * @author Harrison
+ * @version 2.0
+ * @see ControllerViewLesson
+ * @see ModelViewLesson
+ */
 public class ViewViewLesson {
 	// APPLICATION WINDOW DIMENSIONS:
 	private static double width = applicationMain.FoundationsMain.WINDOW_WIDTH;
@@ -28,6 +41,9 @@ public class ViewViewLesson {
 	protected static ViewViewLesson theView;
 	private static Database theDatabase = applicationMain.FoundationsMain.database;
 	protected static LessonsLearned theLesson;
+	
+	// IMPORTANT VARIABLES FORM OTHER CLASSES
+	private static String author;
 	
 	// CORE javaFX stuff:
 	protected static Stage theStage;
@@ -42,6 +58,8 @@ public class ViewViewLesson {
 	// BUTTONS:
 	protected static Button saveButton = new Button("Save Edits");
 	protected static Button returnButton = new Button("Return");
+	public static Button lockTitleButton = new Button("Lock Title");
+	public static Button lockDescriptionButton = new Button("Lock Description");
 	
 	// TEXT FIELDS:
 	protected static TextField titleText = new TextField();
@@ -50,6 +68,18 @@ public class ViewViewLesson {
 	// ALERTS:
 	protected static Alert saveAlert = new Alert(AlertType.INFORMATION);
 	protected static Alert saveConfirm = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+	
+	protected static Alert lockAlert = new Alert(AlertType.INFORMATION);
+	
+	/**
+	 * Displays the View / Edit Lesson page for a lesson. The fields are filled in from the
+	 * lesson, the lock buttons are shown only to curators, and a field is made read-only when
+	 * it is locked and the current user is the lesson's author.
+	 *
+	 * @param ps the JavaFX stage on which to show the page
+	 * @param user the currently logged-in user
+	 * @param lesson the lesson to display and edit
+	 */
 	
 	public static void displayViewLesson(Stage ps, User user, LessonsLearned lesson) {
 		if (theView == null) theView = new ViewViewLesson();        // Instantiate singleton if needed
@@ -60,6 +90,45 @@ public class ViewViewLesson {
 		// automatically fill in the fields:
 		titleText.setText(lesson.getLessonTitle());
 		lessonText.setText(lesson.getLessonText());
+		
+String currentUser = theUser.getUserName();
+		
+		//TP2: This checks to see if the role is curator or not
+				if (theDatabase.isCurator(currentUser)) {
+			        lockTitleButton.setVisible(true);
+			        lockDescriptionButton.setVisible(true);
+			    } else {
+			    	lockTitleButton.setVisible(false);
+			        lockDescriptionButton.setVisible(false);
+			    }
+				
+		//The part below could be changed depending on how we implement Curator. This part so far works as if 
+		//The curator and contributor see the same page but if they have a different View then the Curret user check could be removed		
+		//Check to see if It is the original author and if the title or description has to be locked		
+				if (lesson.getIsTitleLocked() && currentUser.equals(lesson.getAuthor())) {
+					 System.out.println("Title is locked");
+					 ViewViewLesson.lockTitleButton.setText("Unlock Title");
+					titleText.setEditable(false);
+				} else {
+					ViewViewLesson.lockTitleButton.setText("Lock Title");
+					System.out.println("Title is not locked");
+					titleText.setEditable(true);
+				}
+				
+				if (lesson.getIsDescriptionLocked() && currentUser.equals(lesson.getAuthor())) {
+					System.out.println("Description is locked");
+					lockDescriptionButton.setText("Unlock Description");
+					lessonText.setEditable(false);
+				} else {
+					System.out.println("Description is not locked");
+					lockDescriptionButton.setText("Lock Description");
+					lessonText.setEditable(true);
+				}
+				
+		//Check to see if the title/description should be locked
+				
+
+		
 		
 	   	theStage.setTitle("View / Edit Lesson");
     	theStage.setScene(theScene);
@@ -78,6 +147,8 @@ public class ViewViewLesson {
 
     	// BUTTON UI:
     	setupButtonUI(saveButton, "Dialog", 18, 150, Pos.CENTER, 240, 540);
+    	setupButtonUI(lockTitleButton, "Dialog", 18, 150, Pos.CENTER, 440, 540);
+    	setupButtonUI(lockDescriptionButton, "Dialog", 18, 150, Pos.CENTER, 640, 540);
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
@@ -95,6 +166,8 @@ public class ViewViewLesson {
     	// ALERTS:
     	saveAlert.setTitle("Save Lesson Edits");
     	saveAlert.setHeaderText("Save Result");
+    	lockAlert.setTitle("Locking");
+    	lockAlert.setHeaderText("The title/dscription has been locked");
     	
 		// confirmation alert
 		saveConfirm.setTitle("Confirmation");
@@ -103,7 +176,9 @@ public class ViewViewLesson {
     	// BUTTON ACTIONS:		
     	saveButton.setOnAction((_) -> {ControllerViewLesson.performSave(theLesson, theUser);}); // CREATE BUTTON:
     	returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
-
+    	lockTitleButton.setOnAction((_) -> {ControllerViewLesson.performTitleLock(theLesson); }); // TP2
+    	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
+    	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
     	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, saveButton, returnButton);
 	}
