@@ -1,6 +1,7 @@
 package guiCreateLesson;
 
 import entityClasses.User;
+import entityClasses.Category;
 import guiDeleteUser.ViewDeleteUser;
 import guiLessonsHome.ViewLessonsHome;
 import entityClasses.LessonsLearned;
@@ -64,7 +65,7 @@ public class ControllerCreateLesson {
 		}
 		
 		// create the lesson object
-		LessonsLearned lesson = new LessonsLearned(author, title, text);
+		LessonsLearned lesson = new LessonsLearned(author, title, text, Category.General);
 		
 		// send it to the database:
 		database.addLesson(lesson);

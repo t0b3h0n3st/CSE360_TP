@@ -1,10 +1,11 @@
 package database;
 
-import java.sql.*;	
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import entityClasses.Category;
 import entityClasses.LessonsLearned;
 import entityClasses.LessonsLearnedCollection;
 import entityClasses.User;
@@ -88,15 +89,20 @@ public class Database {
 	 *
 	 * @param lesson the lesson to store
 	 */
-	
+		
+	/*
+	 * UPDATE TO ADJUST FOR THE NEW PROPERTIES:
+	 */
 		public void addLesson(LessonsLearned lesson) {
-			String addQuery = "INSERT INTO lessons (author, title, text) " + "VALUES (?, ?, ?)";
+			String addQuery = "INSERT INTO lessons (author, title, text, category) " + "VALUES (?, ?, ?, ?)";
 			// see if we can execute the query: 
 			try (PreparedStatement pstmt = connection.prepareStatement(addQuery)) {
 				// set the right parameters safely using prepared statement: 
 				pstmt.setString(1, lesson.getAuthor());
 				pstmt.setString(2, lesson.getLessonTitle());
 				pstmt.setString(3, lesson.getLessonText());
+				pstmt.setString(4, lesson.getCategory().name()); // get the category as a name:
+				
 				// execute the query:
 				pstmt.executeUpdate(); // 
 			}
@@ -137,7 +143,11 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i);
+					String category = rs.getString("category");
+					Category category_i = Category.fromString(category);
+					Boolean titleLocked_i = rs.getBoolean("isTitleLocked");
+					Boolean descriptionLocked_i = rs.getBoolean("isDescriptionLocked");
+					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, id_i, titleLocked_i, descriptionLocked_i);
 					
 					// finally, add that LessonsLearned object to the list.
 					lessonList.addLesson(lesson);
@@ -177,7 +187,11 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i);
+					String category = rs.getString("category");
+					Category category_i = Category.fromString(category);
+					Boolean titleLocked_i = rs.getBoolean("isTitleLocked");
+					Boolean descriptionLocked_i = rs.getBoolean("isDescriptionLocked");
+					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, id_i, titleLocked_i, descriptionLocked_i);
 					return lesson;
 				}
 				else {
@@ -200,16 +214,21 @@ public class Database {
 		 *         that ID or a database error occurs
 		 */
 		
+		/*
+		 * NEEDS TO BE FIXED:
+		 */
+		
 		public boolean updateLesson(int id, LessonsLearned lesson) {
 			
 			// only set the author, title, and text.
 			// ID should stay the same no matter what.
-			String query = "UPDATE lessons SET author = ?, title = ?, text = ? WHERE id = ?";
+			String query = "UPDATE lessons SET author = ?, title = ?, text = ?, category = ? WHERE id = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 				pstmt.setString(1, lesson.getAuthor());
 				pstmt.setString(2, lesson.getLessonTitle());
 				pstmt.setString(3, lesson.getLessonText());
-				pstmt.setInt(4, id);
+				pstmt.setString(4,  lesson.getCategory().name());
+				pstmt.setInt(5, id);
 				return pstmt.executeUpdate() == 1; // should only be unique rows affected.
 			}
 			catch (SQLException e) {
@@ -534,7 +553,10 @@ public class Database {
                 + "id INT AUTO_INCREMENT PRIMARY KEY, "
                 + "author VARCHAR(255), "
                 + "title VARCHAR(100), "
-                + "text VARCHAR(255))";
+                + "text VARCHAR(255), "
+                + "category VARCHAR(100), "
+                + "isTitleLocked BOOL DEFAULT FALSE, " 
+                + "isDescriptionLocked BOOL DEFAULT FALSE)";
         statement.execute(lessonsLearnedTable);
 	}	
 

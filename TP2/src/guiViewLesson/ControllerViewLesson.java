@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import database.Database;
 import entityClasses.LessonsLearned;
+import entityClasses.Category;
 import entityClasses.User;
 import guiCreateLesson.ModelCreateLesson;
 import guiCreateLesson.ViewCreateLesson;
@@ -71,7 +72,7 @@ public class ControllerViewLesson {
 		}
 		
 		// create a new Lessons object out of the data extracted from text fields that they updated. 
-		LessonsLearned editedLesson = new LessonsLearned(author, title, text);
+		LessonsLearned editedLesson = new LessonsLearned(author, title, text, Category.General);
 		
 		if (database.updateLesson(lesson.getLessonID(), editedLesson)) {
 			ViewViewLesson.saveAlert.setContentText("Changes changed successfully! Returning to Lessons Learned Home.");
