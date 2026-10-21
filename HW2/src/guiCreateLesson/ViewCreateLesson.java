@@ -27,6 +27,20 @@ import guiLessonsHome.ViewLessonsHome;
 import guiUserUpdate.ViewUserUpdate;
 import javafx.scene.control.TextArea;
 	
+/**
+ * <p> Title: ViewCreateLesson </p>
+ *
+ * <p> Description: The JavaFX view for the Create Lesson page. It presents a title field, a
+ * text area for the lesson, a Confirm button, and a button to return to the Lessons Learned
+ * Home page. The widgets are static and the layout is built once, the first time the page is
+ * displayed.</p>
+ *
+ * @author who do I put here?
+ * @version 2.0
+ * @see ControllerCreateLesson
+ * @see ModelCreateLesson
+ */
+
 public class ViewCreateLesson {
 	
 	// APPLICATION WINDOW DIMENSIONS:
@@ -62,6 +76,13 @@ public class ViewCreateLesson {
 	protected static Alert alertConfirmation = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
 	
 	// DISPLAYING THE STAGE WITH THE NEW SCENE:
+		/**
+		 * Displays the Create Lesson page on the given stage.
+		 *
+		 * @param ps the JavaFX stage on which to show the page
+		 * @param user the currently logged-in user, who will be the author of the new lesson
+		 */
+	
 	public static void displayCreateLesson(Stage ps, User user) {
 		if (theView == null) theView = new ViewCreateLesson();        // Instantiate singleton if needed
 		theStage = ps;

@@ -1,10 +1,28 @@
 package guiCreateLesson;
 
+/**
+ * <p> Title: ModelCreateLesson </p>
+ *
+ * <p> Description: The model for the Create Lesson page. It holds the input validation rules
+ * for the title and text of a lesson. Each validator returns an error message, or an empty
+ * string when the input is acceptable, so callers can test {@code isEmpty()} to decide
+ * whether the input passed.</p>
+ *
+ * @author who do i put here?
+ * @version 2.0
+ * @see ControllerCreateLesson
+ * @see ViewCreateLesson
+ */
+
 public class ModelCreateLesson {
 	
-	/** 
-	 * validation for title:
-	 * @return
+	/**
+	 * Validates the title of a lesson. A title is valid when it is not null or blank, is at
+	 * most 100 characters long, and fits on a single line (contains no newline).
+	 *
+	 * @param input the title entered by the user
+	 * @return an empty string if the title is valid; otherwise a message describing the
+	 *         first rule that was violated
 	 */
 	public static String validateTitle(String input) {
 		final int MAX_LENGTH = 100;
@@ -27,6 +45,15 @@ public class ModelCreateLesson {
 		
 		return msg;
 	}
+	
+	/**
+	 * Validates the body text of a lesson. The text is valid when it is not null or blank and
+	 * its length is between 10 and 255 characters inclusive.
+	 *
+	 * @param input the lesson text entered by the user
+	 * @return an empty string if the text is valid; otherwise a message describing the
+	 *         first rule that was violated
+	 */
 	
 	public static String validateText(String input) {
 		final int MAX_LENGTH = 255;

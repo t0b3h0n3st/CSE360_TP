@@ -25,6 +25,18 @@ import entityClasses.LessonsLearnedCollection;
 import entityClasses.User;
 import javafx.scene.control.TextArea;
 
+/**
+ * <p> Title: ViewLessonsHome </p>
+ *
+ * <p> Description: The JavaFX view for the Lessons Learned Home page. It lists the lessons
+ * written by the current user and provides buttons to create, view/edit, and delete a lesson
+ * or to return to the previous page. The class is a singleton-style view: its widgets are
+ * static and the layout is built once, the first time the page is displayed.</p>
+ *
+ * @author who do I put here?
+ * @version 2.0
+ * @see ControllerLessonsHome
+ */
 
 public class ViewLessonsHome {
 	
@@ -64,7 +76,14 @@ public class ViewLessonsHome {
 	// LIST VIEW (TEMPORARY FOR NOW):
 	protected static ListView<String> list = new ListView<String>(); 
 	
-	
+	/**
+	 * Displays the Lessons Learned Home page. The list is refreshed with the current user's
+	 * lessons each time the page is shown, and a prompt is displayed when the user has not
+	 * created any lessons yet.
+	 *
+	 * @param ps the JavaFX stage on which to show the page
+	 * @param user the currently logged-in user
+	 */
 	public static void displayLessonsHome(Stage ps, User user) {
 		if (theView == null) theView = new ViewLessonsHome();        // Instantiate singleton if needed
 		theStage = ps;
@@ -136,6 +155,14 @@ public class ViewLessonsHome {
     	theRootPane.getChildren().addAll(topLabel, createButton, viewButton, deleteButton, returnButton, userLabel, message, list);
 	}
 	
+	/**
+	 * Replaces the contents of a list view with one row per lesson. Each row has the form
+	 * {@code "[title] (ID: [id])"} so that the controller can recover the lesson ID from
+	 * the selected row.
+	 *
+	 * @param list the list view to fill
+	 * @param lessonsList the lessons to display
+	 */
 	protected static void fillList(ListView<String> list, List<LessonsLearned> lessonsList) {
 		list.getItems().clear(); // clear everytime this method is refreshed (so it doesnt duplicate)
 		for (int i = 0; i < lessonsList.size(); i++) {

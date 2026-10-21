@@ -11,14 +11,31 @@ import database.Database;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
+/**
+ * <p> Title: ControllerCreateLesson </p>
+ *
+ * <p> Description: The controller for the Create Lesson page. It reads the values entered in
+ * {@link ViewCreateLesson}, validates them through {@link ModelCreateLesson}, and stores
+ * new lessons in the database.</p>
+ *
+ * @author who do i put here?
+ * @version 2.0
+ */
+
 public class ControllerCreateLesson {
 	
 	private static Database database = applicationMain.FoundationsMain.database;
 	
 	/**
-	 * <p> confirm creation of the lesson, check validation using Model.
-	 * @param theUser
+	 * Handles the Confirm button. The title and text are read from the form and validated; if
+	 * either is invalid an alert listing the errors is shown and nothing is saved. Otherwise
+	 * the user is asked to confirm, and on confirmation a new
+	 * {@link entityClasses.LessonsLearned} is written to the database with the current user
+	 * as its author. After a successful save the form fields are cleared.
+	 *
+	 * @param theUser the currently logged-in user, who becomes the author of the lesson
 	 */
+	
 	protected static void confirmCreation(User theUser) {
 		// PARAMETERS FROM TEXT FIELDS:
 		String title = ViewCreateLesson.lessonTitle.getText().trim();
@@ -59,9 +76,12 @@ public class ControllerCreateLesson {
 		ViewCreateLesson.lessonTitle.clear();
 		ViewCreateLesson.lessonText.clear();
 	}
+	
 	/**
-	 * Return to the Lessons Learned Home Page:
+	 * Handles the Return button by navigating back to the Lessons Learned Home page. Any
+	 * text left in the form is not saved.
 	 */
+	
 	protected static void performReturn() {	
 		// DO WE WANT THIS BEHAVIOR? delete when you return, or just have it save during the local session?
 //		ViewCreateLesson.lessonTitle.clear();

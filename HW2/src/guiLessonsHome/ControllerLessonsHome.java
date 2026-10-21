@@ -13,12 +13,40 @@ import entityClasses.LessonsLearned;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
+
+/**
+ * <p> Title: ControllerLessonsHome </p>
+ *
+ * <p> Description: The controller for the Lessons Learned Home page. It handles navigation to
+ * the create and view pages, deletion of the selected lesson, and returning to the
+ * contributor home page. Lessons are shown in the list as {@code "[title] (ID: [id])"}, and
+ * the ID is parsed back out of the selected row to look up the lesson.</p>
+ *
+ * @author who do i put here?
+ * @version 2.0
+ * @see ViewLessonsHome
+ */
 public class ControllerLessonsHome {
 	private static Database database = applicationMain.FoundationsMain.database;
 	
+	/**
+	 * Navigates to the Create Lesson page.
+	 *
+	 * @param theStage the JavaFX stage on which to display the page
+	 * @param theUser the currently logged-in user
+	 */
 	protected static void goToCreation(Stage theStage, User theUser) {
 		ViewCreateLesson.displayCreateLesson(theStage, theUser);
 	}
+	
+	/**
+	 * Opens the lesson selected in the list on the View / Edit Lesson page. If no row is
+	 * selected, an alert is shown instead. The lesson ID is parsed from the selected row text
+	 * and used to load the full lesson from the database.
+	 *
+	 * @param theStage the JavaFX stage on which to display the page
+	 * @param theUser the currently logged-in user
+	 */
 	
 	protected static void goToView(Stage theStage, User theUser) {
 		String selectedRow = ViewLessonsHome.list.getSelectionModel().getSelectedItem(); // this line is what gets the selected row String.]
@@ -39,6 +67,12 @@ public class ControllerLessonsHome {
 		ViewViewLesson.displayViewLesson(theStage, theUser, lesson);
 	}
 
+	/**
+	 * Deletes the lesson selected in the list. If no row is selected, an alert is shown. The
+	 * user is asked to confirm before the lesson is removed from the database; on success the
+	 * row is also removed from the list, and an alert reports the outcome (including database
+	 * failures).
+	 */
 	protected static void performDeletion() {
 		String selectedRow = ViewLessonsHome.list.getSelectionModel().getSelectedItem(); // this line is what gets the selected row String.
 		if (selectedRow == null) {
@@ -81,9 +115,11 @@ public class ControllerLessonsHome {
 		
 	}
 	
-	// Return to the Contributor Home Page:
-	/*
-	 * [LATER]: need to fix this to account for the curator as well.
+	/**
+	 * Returns to the Contributor Home page.
+	 * <p>
+	 * Note: this always returns to the contributor page, even when the user arrived as a
+	 * curator.
 	 */
 	protected static void performReturn() {
 		ViewContributorHome.displayContributorHome(ViewLessonsHome.theStage, ViewLessonsHome.theUser);
