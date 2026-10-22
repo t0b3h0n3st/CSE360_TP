@@ -91,44 +91,50 @@ public class ViewViewLesson {
 		titleText.setText(lesson.getLessonTitle());
 		lessonText.setText(lesson.getLessonText());
 		
-String currentUser = theUser.getUserName();
+         String currentUser = theUser.getUserName();
 		
 		//TP2: This checks to see if the role is curator or not
 				if (theDatabase.isCurator(currentUser)) {
 			        lockTitleButton.setVisible(true);
 			        lockDescriptionButton.setVisible(true);
+			        
+			        titleText.setEditable(false);
+			        lessonText.setEditable(false);
+			        saveButton.setVisible(false);
+			        
 			    } else {
 			    	lockTitleButton.setVisible(false);
 			        lockDescriptionButton.setVisible(false);
+			        saveButton.setVisible(true);
 			    }
 				
 		//The part below could be changed depending on how we implement Curator. This part so far works as if 
 		//The curator and contributor see the same page but if they have a different View then the Curret user check could be removed		
 		//Check to see if It is the original author and if the title or description has to be locked		
-				if (lesson.getIsTitleLocked() && currentUser.equals(lesson.getAuthor())) {
-					 System.out.println("Title is locked");
-					 ViewViewLesson.lockTitleButton.setText("Unlock Title");
-					titleText.setEditable(false);
-				} else {
-					ViewViewLesson.lockTitleButton.setText("Lock Title");
-					System.out.println("Title is not locked");
-					titleText.setEditable(true);
+				if (!theDatabase.isCurator(currentUser)) {
+
+				    if (lesson.getIsTitleLocked() && currentUser.equals(lesson.getAuthor())) {
+				        System.out.println("Title is locked");
+				        titleText.setEditable(false);
+				    } else {
+				        System.out.println("Title is not locked");
+				        titleText.setEditable(true);
+				    }
+
+				    if (lesson.getIsDescriptionLocked() && currentUser.equals(lesson.getAuthor())) {
+				        System.out.println("Description is locked");
+				        lessonText.setEditable(false);
+				    } else {
+				        System.out.println("Description is not locked");
+				        lessonText.setEditable(true);
+				    }
 				}
 				
-				if (lesson.getIsDescriptionLocked() && currentUser.equals(lesson.getAuthor())) {
-					System.out.println("Description is locked");
-					lockDescriptionButton.setText("Unlock Description");
-					lessonText.setEditable(false);
-				} else {
-					System.out.println("Description is not locked");
-					lockDescriptionButton.setText("Lock Description");
-					lessonText.setEditable(true);
-				}
+				
+				
 				
 		//Check to see if the title/description should be locked
-				
 
-		
 		
 	   	theStage.setTitle("View / Edit Lesson");
     	theStage.setScene(theScene);
