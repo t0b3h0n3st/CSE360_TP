@@ -177,7 +177,15 @@ public class ViewLessonsHome {
 			String title = lessonsList.get(i).getLessonTitle();
 			String category = lessonsList.get(i).getCategory().name();
 			String id = String.valueOf(lessonsList.get(i).getLessonID());
-			String row = String.format("%s / %s (ID: %s)", title, category, id);
+			
+			// String row = String.format("%s / %s (ID: %s)", title, category, id);
+			String row = String.format("%s / %s", title, category);
+			
+			// UI update: include author names if it's a curator. no need for contributors, since they can only see their own.
+			if (theDatabase.isCurator(theUser.getUserName())) {
+				row += String.format(" / by %s", lessonsList.get(i).getAuthor());
+			}
+			row += String.format(" (ID: %s)", id);
 			list.getItems().add(row);
 		}
 	}

@@ -87,7 +87,7 @@ public class ControllerLessonsHome {
 		Optional<ButtonType> result = ViewLessonsHome.deleteConfirm.showAndWait();
 				
 		
-		if (result.get() == ButtonType.NO || result.isEmpty()) {
+		if (result.get() == ButtonType.NO) {
 			return;
 		}
 		
