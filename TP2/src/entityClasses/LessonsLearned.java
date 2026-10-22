@@ -18,7 +18,6 @@ package entityClasses;
  * {@link guiCreateLesson.ModelCreateLesson#validateTitle(String)} and
  * {@link guiCreateLesson.ModelCreateLesson#validateText(String)}.</p>
  *
- * @author Harrison
  * @version 2.0
  * @see LessonsLearnedCollection
  * @see database.Database

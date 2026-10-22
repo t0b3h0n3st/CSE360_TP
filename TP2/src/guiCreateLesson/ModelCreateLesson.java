@@ -7,8 +7,7 @@ package guiCreateLesson;
  * for the title and text of a lesson. Each validator returns an error message, or an empty
  * string when the input is acceptable, so callers can test {@code isEmpty()} to decide
  * whether the input passed.</p>
- *
- * @author who do i put here?
+ * 
  * @version 2.0
  * @see ControllerCreateLesson
  * @see ViewCreateLesson
