@@ -92,7 +92,15 @@ public class ViewLessonsHome {
 		userLabel.setText("User: " + theUser.getUserName());
 		
 		// RETRIEVE LESSON COLLECTION BASED ON THE AUTHOR: (since contributors can only see their own work, the contributor name):
-		LessonsLearnedCollection lessonsCollection = theDatabase.getLessonByAuthor(theUser.getUserName());
+		LessonsLearnedCollection lessonsCollection;
+
+		if (applicationMain.FoundationsMain.activeHomePage == 3) {
+		    lessonsCollection = theDatabase.getAllLessons();
+		}
+		else {
+		    lessonsCollection = theDatabase.getLessonByAuthor(theUser.getUserName());
+		}
+		
 		fillList(list, lessonsCollection.getLessons());
 		
 		// if the list view is empty (user has not created anything), prompt a message:

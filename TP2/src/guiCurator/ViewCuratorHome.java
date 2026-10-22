@@ -55,7 +55,7 @@ public class ViewCuratorHome {
 
 	// GUI ARea 2: This is a stub, so there are no widgets here.  For an actual role page, this are
 	// would contain the widgets needed for the user to play the assigned role.
-	
+	protected static Button button_ManageLessons = new Button("Manage Lessons");
 	
 	
 	// This is a separator and it is used to partition the GUI for various tasks
@@ -162,9 +162,13 @@ public class ViewCuratorHome {
 		setupButtonUI(button_UpdateThisUser, "Dialog", 18, 170, Pos.CENTER, 610, 45);
 		button_UpdateThisUser.setOnAction((_) -> {ControllerCuratorHome.performUpdate(); });
 		
-		// GUI Area 2
 		
-			// This is a stub, so this area is empty
+		// GUI Area 2: Provides access to the Lessons Learned management page
+		// where the Curator can view and manage lessons. 
+		setupButtonUI(button_ManageLessons, "Dialog", 18, 200, Pos.CENTER, 20, 130);
+		button_ManageLessons.setOnAction((_) -> {
+		    ControllerCuratorHome.performLessons();
+		});
 		
 		
 		// GUI Area 3
@@ -179,7 +183,7 @@ public class ViewCuratorHome {
 		// Place all of the widget items into the Root Pane's list of children
         theRootPane.getChildren().addAll(
 			label_PageTitle, label_UserDetails, button_UpdateThisUser, line_Separator1,
-	        line_Separator4, button_Logout, button_Quit);
+	        button_ManageLessons, line_Separator4, button_Logout, button_Quit);
 	}
 	
 	
