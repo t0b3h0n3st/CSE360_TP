@@ -91,6 +91,8 @@ public class ViewViewLesson {
 		titleText.setText(lesson.getLessonTitle());
 		lessonText.setText(lesson.getLessonText());
 		
+		System.out.println("This is a test");
+		
 String currentUser = theUser.getUserName();
 		
 		//TP2: This checks to see if the role is curator or not
