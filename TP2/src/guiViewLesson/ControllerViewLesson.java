@@ -58,7 +58,8 @@ public class ControllerViewLesson {
 		}
 		
 		// if it was the same as original, then dont save and show alert:
-		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text)) {
+		// updated condition to make it so if they dont update the category too, it doesnt count as a change:
+		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text) && lesson.getCategory() == category) {
 			ViewViewLesson.saveAlert.setContentText("You did not make any changes, so there is no need to save.");
 			ViewViewLesson.saveAlert.showAndWait();
 			return;
