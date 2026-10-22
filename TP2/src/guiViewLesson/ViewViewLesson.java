@@ -111,6 +111,10 @@ public class ViewViewLesson {
 				if (theDatabase.isCurator(currentUser)) {
 			        lockTitleButton.setVisible(true);
 			        lockDescriptionButton.setVisible(true);
+			        
+			        // every time the curator enters the page: it'll be resizable for them (fixes bug where you log in as contributor first)
+			        titleText.setEditable(true);
+			        lessonText.setEditable(true);
 			    } else {
 			    	lockTitleButton.setVisible(false);
 			        lockDescriptionButton.setVisible(false);
@@ -121,45 +125,28 @@ public class ViewViewLesson {
 		//Check to see if It is the original author and if the title or description has to be locked		
 				
 				/* --------------------
-				 * [old code], bug: when you exit the page, the button labels "unlock" do not show.
-				   --------------------*/
-//				if (lesson.getIsTitleLocked() && currentUser.equals(lesson.getAuthor())) {
-//					 System.out.println("Title is locked");
-//					 ViewViewLesson.lockTitleButton.setText("Unlock Title");
-//					titleText.setEditable(false);
-//				} else {
-//					ViewViewLesson.lockTitleButton.setText("Lock Title");
-//					System.out.println("Title is not locked");
-//					titleText.setEditable(true);
-//				}
-//				
-//				if (lesson.getIsDescriptionLocked() && currentUser.equals(lesson.getAuthor())) {
-//					System.out.println("Description is locked");
-//					lockDescriptionButton.setText("Unlock Description");
-//					lessonText.setEditable(false);
-//				} else {
-//					System.out.println("Description is not locked");
-//					lockDescriptionButton.setText("Lock Description");
-//					lessonText.setEditable(true);
-//				}
-				
-				/* --------------------
 				 * [harrison] : removed the condition for author. author check is already handled by the database read operations.
+				 * bug fixed pt 2: made it such that curators can still edit (bug caused by my last change lol)
 				   --------------------*/
+				
+				// if title locked: change the button text. make it uneditable only if they are not a curator.
 				if (lesson.getIsTitleLocked()) {
 					 System.out.println("Title is locked");
 					 ViewViewLesson.lockTitleButton.setText("Unlock Title");
-					titleText.setEditable(false);
+					 if (!theDatabase.isCurator(theUser.getUserName())) 
+						 titleText.setEditable(false);
 				} else {
 					ViewViewLesson.lockTitleButton.setText("Lock Title");
 					System.out.println("Title is not locked");
 					titleText.setEditable(true);
 				}
 				
+				// if lesson text locked: change the button text. make it uneditable only if they are not a curator.
 				if (lesson.getIsDescriptionLocked()) {
 					System.out.println("Description is locked");
 					lockDescriptionButton.setText("Unlock Description");
-					lessonText.setEditable(false);
+					if (!theDatabase.isCurator(theUser.getUserName())) 
+						lessonText.setEditable(false);
 				} else {
 					System.out.println("Description is not locked");
 					lockDescriptionButton.setText("Lock Description");

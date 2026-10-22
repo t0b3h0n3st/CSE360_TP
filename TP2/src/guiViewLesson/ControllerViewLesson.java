@@ -108,7 +108,10 @@ public class ControllerViewLesson {
 				database.lockTitle(author, id); //Update the data in the database
 			lesson.setIsTitleLocked(true); //updates in the LessonsLearned
 			
-			ViewViewLesson.titleText.setEditable(false);
+			// [HARRISON]:
+			// on the first time locking, make it such that it still allows curators to edit it.
+			if (!database.isCurator(ViewViewLesson.theUser.getUserName()))
+				ViewViewLesson.titleText.setEditable(false);
 			
 			ViewViewLesson.lockTitleButton.setText("Unlock Title");
 			
@@ -151,6 +154,9 @@ public class ControllerViewLesson {
 				database.lockDescription(author, id); //Update the data in the database
 			lesson.setIsDescriptionLocked(true); //updates in the LessonsLearned
 			
+			// [HARRISON]:
+			// on the first time locking, make it such that it still allows curators to edit it.
+				if (!database.isCurator(ViewViewLesson.theUser.getUserName()))
 			ViewViewLesson.lessonText.setEditable(false);
 			
 			ViewViewLesson.lockDescriptionButton.setText("Unlock Description");
