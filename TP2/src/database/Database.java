@@ -120,6 +120,11 @@ public class Database {
 		 *
 		 * @return a collection containing all lessons in the database
 		 */
+		
+		/* --------------------
+		 * ANGEL's CODE:
+		 * - [harrison] : added to retrieve ALL attributes (lock features + category)
+		   -------------------- */
 		public LessonsLearnedCollection getAllLessons() {
 		    String query = "SELECT * FROM lessons";
 		    LessonsLearnedCollection lessonList = new LessonsLearnedCollection();
@@ -132,9 +137,11 @@ public class Database {
 		            String author = rs.getString("author");
 		            String title = rs.getString("title");
 		            String text = rs.getString("text");
-
-		            LessonsLearned lesson =
-		                    new LessonsLearned(author, title, text, id);
+					String category_String = rs.getString("category");
+					Category category = Category.fromString(category_String);
+					Boolean titleLocked = rs.getBoolean("isTitleLocked");
+					Boolean descriptionLocked = rs.getBoolean("isDescriptionLocked");
+					LessonsLearned lesson = new LessonsLearned(author, title, text, category, id, titleLocked, descriptionLocked);
 
 		            lessonList.addLesson(lesson);
 		        }
@@ -147,8 +154,6 @@ public class Database {
 		}
 		
 	
-		
-		
 			/**
 			 * Retrieves every lesson written by the given author.
 			 *

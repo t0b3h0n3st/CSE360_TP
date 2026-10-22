@@ -2,6 +2,7 @@ package guiViewLesson;
 
 import database.Database;
 import entityClasses.User;
+import entityClasses.Category;
 import entityClasses.LessonsLearned;
 import guiLessonsHome.ControllerLessonsHome;
 import guiLessonsHome.ViewLessonsHome;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -30,6 +32,10 @@ import javafx.scene.control.TextArea;
  * @version 2.0
  * @see ControllerViewLesson
  * @see ModelViewLesson
+ */
+
+/* 
+ * NOTE TO SELF: EDIT UPDATING LESSOn, CATEGORY CHANGE COUNTS AS DIFFERENT
  */
 public class ViewViewLesson {
 	// APPLICATION WINDOW DIMENSIONS:
@@ -71,6 +77,13 @@ public class ViewViewLesson {
 	
 	protected static Alert lockAlert = new Alert(AlertType.INFORMATION);
 	
+	/* ---------------------------------------------
+	 * adding in combo box for category selection:
+	   --------------------------------------------- */
+	// COMBO BOX (Category):
+	protected static Label categoryLabel = new Label("Select a category: ");
+	protected static ComboBox <Category> category;
+	
 	/**
 	 * Displays the View / Edit Lesson page for a lesson. The fields are filled in from the
 	 * lesson, the lock buttons are shown only to curators, and a field is made read-only when
@@ -86,6 +99,7 @@ public class ViewViewLesson {
 		theStage = ps;
 		theUser = user;
 		theLesson = lesson; // theLesson variable will be used when passing into other args into controller.
+		category.setValue(theLesson.getCategory());
 		
 		// automatically fill in the fields:
 		titleText.setText(lesson.getLessonTitle());
@@ -143,7 +157,8 @@ String currentUser = theUser.getUserName();
     	// LABEL UI:
     	setupLabelUI(topLabel, "Arial", 28, width, Pos.CENTER, 0, 15);
     	setupLabelUI(titleLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 62);
-    	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 105);
+    	setupLabelUI(categoryLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 102);
+    	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 150);
 
     	// BUTTON UI:
     	setupButtonUI(saveButton, "Dialog", 18, 150, Pos.CENTER, 240, 540);
@@ -155,6 +170,11 @@ String currentUser = theUser.getUserName();
     	
        	// TEXT FIELD UI:
     	setupTextUI(titleText, "Arial", 16, 400, Pos.CENTER_LEFT, 280, 60, true);
+    	
+		// COMBO BOX:
+	    category = new ComboBox<>();
+	    category.getItems().addAll(Category.values());
+		setupComboBoxUI(category, "Dialog", 16, 250, 280, 100);
     	
     	// TEXT AREA UI:
     	lessonText.setWrapText(true);
@@ -172,6 +192,7 @@ String currentUser = theUser.getUserName();
 		// confirmation alert
 		saveConfirm.setTitle("Confirmation");
 		saveConfirm.setHeaderText("Are You Sure?");
+		
     	
     	// BUTTON ACTIONS:		
     	saveButton.setOnAction((_) -> {ControllerViewLesson.performSave(theLesson, theUser);}); // CREATE BUTTON:
@@ -180,7 +201,7 @@ String currentUser = theUser.getUserName();
     	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
     	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, saveButton, returnButton);
+    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, category, categoryLabel, saveButton, returnButton, lockTitleButton, lockDescriptionButton);
 	}
 	
     // copy pasted again
@@ -234,4 +255,12 @@ String currentUser = theUser.getUserName();
 		t.setLayoutY(y);		
 		t.setEditable(e);
 	}	
+	
+	protected static void setupComboBoxUI(ComboBox <Category> c, String ff, double f, double w,
+			double x, double y){
+		c.setStyle("-fx-font: " + f + " " + ff + ";");
+		c.setMinWidth(w);
+		c.setLayoutX(x);
+		c.setLayoutY(y);
+	}
 }

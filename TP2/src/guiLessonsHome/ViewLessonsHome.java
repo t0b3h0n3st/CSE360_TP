@@ -175,8 +175,9 @@ public class ViewLessonsHome {
 		list.getItems().clear(); // clear everytime this method is refreshed (so it doesnt duplicate)
 		for (int i = 0; i < lessonsList.size(); i++) {
 			String title = lessonsList.get(i).getLessonTitle();
+			String category = lessonsList.get(i).getCategory().name();
 			String id = String.valueOf(lessonsList.get(i).getLessonID());
-			String row = String.format("%s (ID: %s)", title, id);
+			String row = String.format("%s / %s (ID: %s)", title, category, id);
 			list.getItems().add(row);
 		}
 	}
