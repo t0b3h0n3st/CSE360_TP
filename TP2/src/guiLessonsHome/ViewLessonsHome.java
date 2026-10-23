@@ -65,6 +65,9 @@ public class ViewLessonsHome {
 	protected static Button deleteButton = new Button("Delete Lesson");
 	protected static Button returnButton = new Button("Return");
 	
+	//TP2 Button
+	protected static Button lockLessonButton = new Button("Lock Lesson");
+	
 	// ALERTS:
 	protected static Alert deleteAlert = new Alert(AlertType.INFORMATION);
 	protected static Alert deleteConfirm = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
@@ -102,6 +105,15 @@ public class ViewLessonsHome {
 		else {
 			message.setText("");
 		}
+
+		
+		//TP2, For lock button and for which list is displayed depending on the role
+		if(user.getCuratorRole()) {
+		lockLessonButton.setVisible(true);
+		} else {
+		lockLessonButton.setVisible(false);
+		}
+		//
 		
 	   	theStage.setTitle("Lessons Learned Home");
     	theStage.setScene(theScene);
@@ -123,6 +135,7 @@ public class ViewLessonsHome {
     	setupButtonUI(createButton, "Dialog", 18, 150, Pos.CENTER, 25, 120);
     	setupButtonUI(viewButton, "Dialog", 18, 150, Pos.CENTER, 200, 120);
     	setupButtonUI(deleteButton, "Dialog", 18, 150, Pos.CENTER, 375, 120);
+    	setupButtonUI(lockLessonButton, "Dialog", 18, 150, Pos.CENTER, 550, 120);
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
@@ -149,10 +162,11 @@ public class ViewLessonsHome {
     	createButton.setOnAction((_) -> {ControllerLessonsHome.goToCreation(theStage, theUser);}); // CREATE BUTTON:
     	viewButton.setOnAction((_) -> {ControllerLessonsHome.goToView(theStage, theUser	);}); // VIEW BUTTON:
     	deleteButton.setOnAction((_) -> {ControllerLessonsHome.performDeletion();}); // DELETE BUTTON:
+    	lockLessonButton.setOnAction((_) -> {ControllerLessonsHome.performLessonLock();}); // Lock Button:
     	returnButton.setOnAction((_) -> {ControllerLessonsHome.performReturn(); }); // RETURN TO HOME:
 
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, createButton, viewButton, deleteButton, returnButton, userLabel, message, list);
+    	theRootPane.getChildren().addAll(topLabel, createButton, viewButton, lockLessonButton, deleteButton, returnButton, userLabel, message, list);
 	}
 	
 	/**

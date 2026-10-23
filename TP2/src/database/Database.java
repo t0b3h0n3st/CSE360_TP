@@ -137,7 +137,8 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i);
+					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked");
+					lesson = new LessonsLearned(author_i, title_i, text_i, id_i, lessonLocked_i);
 					
 					// finally, add that LessonsLearned object to the list.
 					lessonList.addLesson(lesson);
@@ -177,7 +178,8 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i);
+					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked");
+					lesson = new LessonsLearned(author_i, title_i, text_i, id_i, lessonLocked_i);
 					return lesson;
 				}
 				else {
@@ -362,6 +364,21 @@ public class Database {
 			    }
 			  
 		  }
+		  
+		  
+		  public void lockLesson(String author, int id){
+			  String query = "UPDATE lessons SET isLessonLocked = TRUE WHERE id = ? AND author = ?";
+
+			    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+			        pstmt.setInt(1, id);
+			        pstmt.setString(2, author);
+			        pstmt.executeUpdate();
+			    }
+			    catch (SQLException e) {
+			        e.printStackTrace();
+			    }
+		  }
+		  
 		
 		  /**
 		   * Removes the title lock from a lesson so that its author may edit the title again.
@@ -404,6 +421,20 @@ public class Database {
 			    }
 			  
 		  }
+		  
+		  public void unlockLesson(String author, int id){
+			  String query = "UPDATE lessons SET isLessonLocked = FALSE WHERE id = ? AND author = ?";
+
+			    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+			        pstmt.setInt(1, id);
+			        pstmt.setString(2, author);
+			        pstmt.executeUpdate();
+			    }
+			    catch (SQLException e) {
+			        e.printStackTrace();
+			    }
+		  }
+		
 	    
 	/** 
 	 * <p> Method: boolean isAdmin(String username)
@@ -534,7 +565,8 @@ public class Database {
                 + "id INT AUTO_INCREMENT PRIMARY KEY, "
                 + "author VARCHAR(255), "
                 + "title VARCHAR(100), "
-                + "text VARCHAR(255))";
+                + "text VARCHAR(255)"
+                + "isLessonLocked BOOL DEFAULT FALSE)";
         statement.execute(lessonsLearnedTable);
 	}	
 

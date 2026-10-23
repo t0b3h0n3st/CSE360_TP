@@ -38,6 +38,7 @@ public class LessonsLearned {
 	private int lessonID; 
 	private boolean isTitleLocked;
 	private boolean isDescriptionLocked;
+	private boolean isLessonLocked;
 	
 	/**
 	 * Default constructor. It is private and intentionally unused so that a lesson cannot be
@@ -74,13 +75,15 @@ public class LessonsLearned {
 	 * @param lessonID the unique ID assigned to the lesson by the database
 	 * @param isTitleLocked {@code true} if the title is locked against editing
 	 * @param isDescriptionLocked {@code true} if the description is locked against editing
+	 * @param isLessonLocked {@code true} if the lesson is locked
 	 */
 	
-	public LessonsLearned(String author, String lessonTitle, String lessonText, int lessonID) {
+	public LessonsLearned(String author, String lessonTitle, String lessonText, int lessonID, boolean isLessonLocked) {
 		this.author = author;
 		this.lessonTitle = lessonTitle;
 		this.lessonText = lessonText;
 		this.lessonID = lessonID;
+		this.isLessonLocked = isLessonLocked;
 	}
 	
 	// GETTERS:
@@ -103,6 +106,9 @@ public class LessonsLearned {
 	/** @return {@code true} if the description is locked against editing, {@code false} otherwise */
 	public boolean getIsDescriptionLocked() {return this.isDescriptionLocked;}
 	
+	/** @return {@code true} if the lesson is locked, {@code false} otherwise */
+	public boolean getIsLessonLocked() {return this.isLessonLocked;}
+	
 	
 	// SETTERS:
 	
@@ -120,6 +126,9 @@ public class LessonsLearned {
 	
 	/** @param isDescriptionLocked {@code true} to lock the description against editing */
 	public void setIsDescriptionLocked(boolean isDescriptionLocked) {this.isDescriptionLocked = isDescriptionLocked;}
+	
+	/** @param isLessonLocked {@code true} to lock the lesson */
+	public void setIsLessonLocked(boolean isDescriptionLocked) {this.isDescriptionLocked = isDescriptionLocked;}
 	
 	// VALIDATION:
 	

@@ -81,6 +81,25 @@ public class ControllerLessonsHome {
 			return;
 		}
 		
+		//TP2:  Before the deletion can go through, the lesson has to be checked if it has anything locked
+		
+				// Rows in the form of "[title] (ID: [id])"
+				int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
+				int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring
+				int id = Integer.parseInt(selectedRow.substring(start, end)); // parse the substring which returns the ID value in a string (into an integer)
+						
+				LessonsLearned lesson = database.getLessonByID(id);
+				
+				if(lesson.getIsLessonLocked() || lesson.getIsTitleLocked() || lesson.getIsDescriptionLocked()) {
+					ViewLessonsHome.deleteAlert.setContentText("The lesson or a part of the esson is locked");
+					ViewLessonsHome.deleteAlert.showAndWait();
+					
+					return;
+				}
+				
+				//TP2 End
+				
+		
 		// before the deletion method goes through, send a confirmation alert to the user.
 		ViewLessonsHome.deleteConfirm.setContentText("Are you sure you want to delete lesson: " + selectedRow + "?");
 		Optional<ButtonType> result = ViewLessonsHome.deleteConfirm.showAndWait();
@@ -91,11 +110,6 @@ public class ControllerLessonsHome {
 		}
 		
 		// PERFORM THE DELETION (should work unless given database issues)
-		
-		// Rows in the form of "[title] (ID: [id])"
-		int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
-		int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring
-		int id = Integer.parseInt(selectedRow.substring(start, end)); // parse the substring which returns the ID value in a string (into an integer)
 		
 		// PERFORM DELETION:
 		if (database.deleteLesson(id)) {
@@ -114,6 +128,33 @@ public class ControllerLessonsHome {
 		}
 		
 	}
+	
+	
+	//TP2 Lock Lesson Function
+		protected static void performLessonLock() {
+			String selectedRow = ViewLessonsHome.list.getSelectionModel().getSelectedItem(); // this line is what gets the selected row String.
+			// Rows in the form of "[title] (ID: [id])"
+					int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
+					int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring
+					int id = Integer.parseInt(selectedRow.substring(start, end)); // parse the substring which returns the ID value in a string (into an integer)
+		
+					LessonsLearned lesson = database.getLessonByID(id);	
+					
+
+			if (ViewLessonsHome.lockLessonButton.getText() == "Lock Lesson") {
+				ViewLessonsHome.lockLessonButton.setText("Unlock Lesson");	
+			database.lockLesson(lesson.getAuthor(), id); //Update the data in the database
+			lesson.setIsLessonLocked(true); //updates in the LessonsLearned
+			
+			 return;
+			} else if (ViewLessonsHome.lockLessonButton.getText() == "Unlock Lesson") {
+				ViewLessonsHome.lockLessonButton.setText("Lock Lesson");	
+				database.unlockLesson(lesson.getAuthor(), id); //Update the data in the database
+				lesson.setIsLessonLocked(false); //updates in the LessonsLearned
+			}
+			
+			
+		}
 	
 	/**
 	 * Returns to the Contributor Home page.
