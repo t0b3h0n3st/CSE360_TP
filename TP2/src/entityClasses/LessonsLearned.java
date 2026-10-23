@@ -64,15 +64,14 @@ public class LessonsLearned {
 	}
 	
 	/**
-	 * Creates a lesson with every field specified. This is used when reading an existing
-	 * lesson back from the database, where the ID and lock flags are already known.
+	 * Creates a lesson with its database ID specified. This is used when reading an existing
+	 * lesson back from the database, where the ID is already known. Both lock flags default
+	 * to {@code false}.
 	 *
 	 * @param author the username of the contributor who wrote the lesson
 	 * @param lessonTitle the title of the lesson
 	 * @param lessonText the body text of the lesson
 	 * @param lessonID the unique ID assigned to the lesson by the database
-	 * @param isTitleLocked {@code true} if the title is locked against editing
-	 * @param isDescriptionLocked {@code true} if the description is locked against editing
 	 */
 	
 	public LessonsLearned(String author, String lessonTitle, String lessonText, int lessonID) {
@@ -84,40 +83,73 @@ public class LessonsLearned {
 	
 	// GETTERS:
 	
-	/** @return the username of the contributor who wrote this lesson */
+	/**
+	 * Gets the author of this lesson.
+	 * @return the username of the contributor who wrote this lesson
+	 */
 	public String getAuthor() { return this.author; }
 	
-	/** @return the title of this lesson */
+	/**
+	 * Gets the title of this lesson.
+	 * @return the title of this lesson
+	 */
 	public String getLessonTitle() { return this.lessonTitle; }
 	
-	/** @return the body text of this lesson */
+	/**
+	 * Gets the body text of this lesson.
+	 * @return the body text of this lesson
+	 */
 	public String getLessonText() { return this.lessonText; }
 	
-	/** @return the database-assigned ID of this lesson ({@code 0} if not yet stored) */
+	/**
+	 * Gets the database-assigned ID of this lesson.
+	 * @return the database-assigned ID of this lesson ({@code 0} if not yet stored)
+	 */
 	public int getLessonID() { return this.lessonID; }
 	
-	/** @return {@code true} if the title is locked against editing, {@code false} otherwise */
+	/**
+	 * Reports whether the title is locked.
+	 * @return {@code true} if the title is locked against editing, {@code false} otherwise
+	 */
 	public boolean getIsTitleLocked() {return this.isTitleLocked;}
 	
-	/** @return {@code true} if the description is locked against editing, {@code false} otherwise */
+	/**
+	 * Reports whether the description is locked.
+	 * @return {@code true} if the description is locked against editing, {@code false} otherwise
+	 */
 	public boolean getIsDescriptionLocked() {return this.isDescriptionLocked;}
 	
 	
 	// SETTERS:
 	
-	/** @param author the username of the contributor who wrote this lesson */
+	/**
+	 * Sets the title of this lesson.
+	 * @param lessonTitle the new title of this lesson
+	 */
 	public void setLessonTitle(String lessonTitle) { this.lessonTitle = lessonTitle; }
 	
-	/** @param lessonTitle the new title of this lesson */
+	/**
+	 * Sets the body text of this lesson.
+	 * @param lessonText the new body text of this lesson
+	 */
 	public void setLessonText(String lessonText) { this.lessonText = lessonText; }
 	
-	/** @param lessonID the database-assigned ID of this lesson */
+	/**
+	 * Sets the database-assigned ID of this lesson.
+	 * @param lessonID the database-assigned ID of this lesson
+	 */
 	public void setLessonID(int lessonID) { this.lessonID = lessonID; }
 	
-	/** @param isTitleLocked {@code true} to lock the title against editing */
+	/**
+	 * Locks or unlocks the title.
+	 * @param isTitleLocked {@code true} to lock the title against editing
+	 */
 	public void setIsTitleLocked(boolean isTitleLocked) {this.isTitleLocked = isTitleLocked; }
 	
-	/** @param isDescriptionLocked {@code true} to lock the description against editing */
+	/**
+	 * Locks or unlocks the description.
+	 * @param isDescriptionLocked {@code true} to lock the description against editing
+	 */
 	public void setIsDescriptionLocked(boolean isDescriptionLocked) {this.isDescriptionLocked = isDescriptionLocked;}
 	
 	// VALIDATION:
