@@ -88,6 +88,34 @@ public class ControllerViewLesson {
 		}
 	}
 	
+	/**
+	 * Saves the additional information entered by the Curator.
+	 *
+	 * @param lesson the lesson being updated
+	 */
+	protected static void performSaveCuratorInfo(LessonsLearned lesson) {
+
+	    String curatorInfo =
+	            ViewViewLesson.curatorInfoText.getText().trim();
+
+	    if (database.updateCuratorAdditionalInformation(
+	            lesson.getLessonID(), curatorInfo)) {
+
+	        lesson.setCuratorAdditionalInformation(curatorInfo);
+
+	        ViewViewLesson.saveAlert.setContentText(
+	                "Curator additional information saved successfully.");
+	        ViewViewLesson.saveAlert.showAndWait();
+	    }
+	    else {
+	        ViewViewLesson.saveAlert.setContentText(
+	                "There was an error with the database. Please try again.");
+	        ViewViewLesson.saveAlert.showAndWait();
+	    }
+	}
+	
+	
+	
 	//TP2
 		// I should also buttons to remove the lock
 		/**

@@ -94,7 +94,7 @@ public class Database {
 	 * UPDATE TO ADJUST FOR THE NEW PROPERTIES:
 	 */
 		public void addLesson(LessonsLearned lesson) {
-			String addQuery = "INSERT INTO lessons (author, title, text, category) " + "VALUES (?, ?, ?, ?)";
+			String addQuery = "INSERT INTO lessons (author, title, text, category, curatorAdditionalInformation) " + "VALUES (?, ?, ?, ?, ?)";
 			// see if we can execute the query: 
 			try (PreparedStatement pstmt = connection.prepareStatement(addQuery)) {
 				// set the right parameters safely using prepared statement: 
@@ -102,6 +102,7 @@ public class Database {
 				pstmt.setString(2, lesson.getLessonTitle());
 				pstmt.setString(3, lesson.getLessonText());
 				pstmt.setString(4, lesson.getCategory().name()); // get the category as a name:
+				pstmt.setString(5,  lesson.getCuratorAdditionalInformation()); // added this in : need to store the curator information too.
 				
 				// execute the query:
 				pstmt.executeUpdate(); // 
@@ -121,10 +122,6 @@ public class Database {
 		 * @return a collection containing all lessons in the database
 		 */
 		
-		/* --------------------
-		 * ANGEL's CODE:
-		 * - [harrison] : added to retrieve ALL attributes (lock features + category)
-		   -------------------- */
 		public LessonsLearnedCollection getAllLessons() {
 		    String query = "SELECT * FROM lessons";
 		    LessonsLearnedCollection lessonList = new LessonsLearnedCollection();
@@ -139,10 +136,10 @@ public class Database {
 		            String text = rs.getString("text");
 					String category_String = rs.getString("category");
 					Category category = Category.fromString(category_String);
+					String curatorInfo = rs.getString("curatorAdditionalInformation");
 					Boolean titleLocked = rs.getBoolean("isTitleLocked");
 					Boolean descriptionLocked = rs.getBoolean("isDescriptionLocked");
-					LessonsLearned lesson = new LessonsLearned(author, title, text, category, id, titleLocked, descriptionLocked);
-
+					LessonsLearned lesson = new LessonsLearned(author, title, text, category, curatorInfo, id, titleLocked, descriptionLocked);
 		            lessonList.addLesson(lesson);
 		        }
 
@@ -163,7 +160,6 @@ public class Database {
 			 *         occurs
 			 */
 		
-		
 		public LessonsLearnedCollection getLessonByAuthor(String author) {
 			// select ALL rows that have that author's name:
 			String query = "SELECT * FROM lessons WHERE author = ?";
@@ -182,11 +178,12 @@ public class Database {
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
 					String category = rs.getString("category");
+					String curatorInfo_i = rs.getString("curatorAdditionalInformation");
 					Category category_i = Category.fromString(category);
 					Boolean titleLocked_i = rs.getBoolean("isTitleLocked");
 					Boolean descriptionLocked_i = rs.getBoolean("isDescriptionLocked");
-					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, id_i, titleLocked_i, descriptionLocked_i);
 					
+					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, curatorInfo_i, id_i, titleLocked_i, descriptionLocked_i);
 					// finally, add that LessonsLearned object to the list.
 					lessonList.addLesson(lesson);
 				}
@@ -227,9 +224,11 @@ public class Database {
 					String text_i = rs.getString("text");
 					String category = rs.getString("category");
 					Category category_i = Category.fromString(category);
+					String curatorInfo_i = rs.getString("curatorAdditionalInformation");
 					Boolean titleLocked_i = rs.getBoolean("isTitleLocked");
 					Boolean descriptionLocked_i = rs.getBoolean("isDescriptionLocked");
-					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, id_i, titleLocked_i, descriptionLocked_i);
+					
+					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, curatorInfo_i, id_i, titleLocked_i, descriptionLocked_i);
 					return lesson;
 				}
 				else {
@@ -274,6 +273,35 @@ public class Database {
 				return false;
 			}
 		}
+		
+		
+		/**
+		 * Updates the additional information added by a Curator
+		 * for a specific lesson.
+		 *
+		 * @param id the ID of the lesson
+		 * @param curatorAdditionalInformation the additional information added by the Curator
+		 * @return true if the information was updated successfully
+		 */
+		public boolean updateCuratorAdditionalInformation(
+		        int id, String curatorAdditionalInformation) {
+
+		    String query =
+		            "UPDATE lessons SET curatorAdditionalInformation = ? WHERE id = ?";
+
+		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+		        pstmt.setString(1, curatorAdditionalInformation);
+		        pstmt.setInt(2, id);
+
+		        return pstmt.executeUpdate() == 1;
+		    }
+		    catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+		
 		
 		/**
 		 * Deletes the lesson with the given ID.
@@ -593,9 +621,15 @@ public class Database {
                 + "title VARCHAR(100), "
                 + "text VARCHAR(255), "
                 + "category VARCHAR(100), "
+                + "curatorAdditionalInformation VARCHAR(300), "
                 + "isTitleLocked BOOL DEFAULT FALSE, " 
                 + "isDescriptionLocked BOOL DEFAULT FALSE)";
         statement.execute(lessonsLearnedTable);
+        
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS category VARCHAR(100)");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS curatorAdditionalInformation VARCHAR(300)");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS isTitleLocked BOOL DEFAULT FALSE");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS isDescriptionLocked BOOL DEFAULT FALSE");
 	}	
 
 
