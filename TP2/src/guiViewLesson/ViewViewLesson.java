@@ -58,6 +58,8 @@ public class ViewViewLesson {
 	// BUTTONS:
 	protected static Button saveButton = new Button("Save Edits");
 	protected static Button returnButton = new Button("Return");
+	/** Opens attempt history without changing the lesson title or description. */
+	protected static Button experienceButton = new Button("Experience Information");
 	public static Button lockTitleButton = new Button("Lock Title");
 	public static Button lockDescriptionButton = new Button("Lock Description");
 	
@@ -86,6 +88,7 @@ public class ViewViewLesson {
 		theStage = ps;
 		theUser = user;
 		theLesson = lesson; // theLesson variable will be used when passing into other args into controller.
+		experienceButton.setVisible(user.getContributorRole() && user.getUserName().equals(lesson.getAuthor()));
 		
 		// automatically fill in the fields:
 		titleText.setText(lesson.getLessonTitle());
@@ -152,6 +155,7 @@ String currentUser = theUser.getUserName();
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
+		setupButtonUI(experienceButton, "Dialog", 18, 250, Pos.CENTER, 20, 495);
     	
        	// TEXT FIELD UI:
     	setupTextUI(titleText, "Arial", 16, 400, Pos.CENTER_LEFT, 280, 60, true);
@@ -175,12 +179,13 @@ String currentUser = theUser.getUserName();
     	
     	// BUTTON ACTIONS:		
     	saveButton.setOnAction((_) -> {ControllerViewLesson.performSave(theLesson, theUser);}); // CREATE BUTTON:
-    	returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
+		returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
+		experienceButton.setOnAction((_) -> guiExperience.ViewExperience.displayExperience(theStage, theUser, theLesson));
     	lockTitleButton.setOnAction((_) -> {ControllerViewLesson.performTitleLock(theLesson); }); // TP2
     	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
     	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, saveButton, returnButton);
+		theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, saveButton, returnButton, experienceButton);
 	}
 	
     // copy pasted again
