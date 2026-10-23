@@ -91,6 +91,16 @@ public class ViewLessonsHome {
 		
 		userLabel.setText("User: " + theUser.getUserName());
 		
+		// TP2: Set buttons based on the current role
+		if (applicationMain.FoundationsMain.activeHomePage == 3) {
+		    createButton.setVisible(false);
+		    viewButton.setText("View Lesson");
+		}
+		else {
+		    createButton.setVisible(true);
+		    viewButton.setText("View Lesson");
+		}
+		
 		// RETRIEVE LESSON COLLECTION BASED ON THE AUTHOR: (since contributors can only see their own work, the contributor name):
 		LessonsLearnedCollection lessonsCollection;
 

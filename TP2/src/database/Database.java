@@ -126,9 +126,10 @@ public class Database {
 		            String author = rs.getString("author");
 		            String title = rs.getString("title");
 		            String text = rs.getString("text");
+		            String curatorInfo = rs.getString("curatorAdditionalInformation");
 
 		            LessonsLearned lesson =
-		                    new LessonsLearned(author, title, text, id);
+		                    new LessonsLearned(author, title, text, id, curatorInfo);
 
 		            lessonList.addLesson(lesson);
 		        }
@@ -170,7 +171,10 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i);
+					String curatorInfo_i = rs.getString("curatorAdditionalInformation");
+
+					lesson = new LessonsLearned(
+					        author_i, title_i, text_i, id_i, curatorInfo_i);
 					
 					// finally, add that LessonsLearned object to the list.
 					lessonList.addLesson(lesson);
@@ -210,7 +214,10 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i);
+					String curatorInfo_i = rs.getString("curatorAdditionalInformation");
+
+					lesson = new LessonsLearned(
+					        author_i, title_i, text_i, id_i, curatorInfo_i);
 					return lesson;
 				}
 				else {
@@ -250,6 +257,35 @@ public class Database {
 				return false;
 			}
 		}
+		
+		
+		/**
+		 * Updates the additional information added by a Curator
+		 * for a specific lesson.
+		 *
+		 * @param id the ID of the lesson
+		 * @param curatorAdditionalInformation the additional information added by the Curator
+		 * @return true if the information was updated successfully
+		 */
+		public boolean updateCuratorAdditionalInformation(
+		        int id, String curatorAdditionalInformation) {
+
+		    String query =
+		            "UPDATE lessons SET curatorAdditionalInformation = ? WHERE id = ?";
+
+		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+		        pstmt.setString(1, curatorAdditionalInformation);
+		        pstmt.setInt(2, id);
+
+		        return pstmt.executeUpdate() == 1;
+		    }
+		    catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+		
 		
 		/**
 		 * Deletes the lesson with the given ID.
@@ -563,12 +599,16 @@ public class Database {
          * [HARRISON] HW2:
            ----------------*/
         // Create the lessons table [id] [author] [title] [text]
-        String lessonsLearnedTable = "CREATE TABLE IF NOT EXISTS lessons ("
-                + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                + "author VARCHAR(255), "
-                + "title VARCHAR(100), "
-                + "text VARCHAR(255))";
-        statement.execute(lessonsLearnedTable);
+	    String lessonsLearnedTable = "CREATE TABLE IF NOT EXISTS lessons ("
+	            + "id INT AUTO_INCREMENT PRIMARY KEY, "
+	            + "author VARCHAR(255), "
+	            + "title VARCHAR(100), "
+	            + "text VARCHAR(255), "
+	            + "curatorAdditionalInformation VARCHAR(1000))";
+	    statement.execute(lessonsLearnedTable);
+	    
+	    statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS "
+	            + "curatorAdditionalInformation VARCHAR(1000)");
 	}	
 
 

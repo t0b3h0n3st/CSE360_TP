@@ -55,8 +55,15 @@ public class ViewViewLesson {
 	protected static Label titleLabel = new Label("Title: ");
 	protected static Label lessonsLabel = new Label("Lessons Learned: ");
 	
+	protected static Label curatorInfoLabel =
+	        new Label("Curator Additional Information: ");
+	
 	// BUTTONS:
 	protected static Button saveButton = new Button("Save Edits");
+	protected static Button saveCuratorInfoButton =
+	        new Button("Save Curator Info");
+	
+	
 	protected static Button returnButton = new Button("Return");
 	public static Button lockTitleButton = new Button("Lock Title");
 	public static Button lockDescriptionButton = new Button("Lock Description");
@@ -64,6 +71,7 @@ public class ViewViewLesson {
 	// TEXT FIELDS:
 	protected static TextField titleText = new TextField();
 	protected static TextArea lessonText = new TextArea();
+	protected static TextArea curatorInfoText = new TextArea();
 	
 	// ALERTS:
 	protected static Alert saveAlert = new Alert(AlertType.INFORMATION);
@@ -94,24 +102,37 @@ public class ViewViewLesson {
          String currentUser = theUser.getUserName();
 		
 		//TP2: This checks to see if the role is curator or not
-				if (theDatabase.isCurator(currentUser)) {
-			        lockTitleButton.setVisible(true);
-			        lockDescriptionButton.setVisible(true);
-			        
-			        titleText.setEditable(false);
-			        lessonText.setEditable(false);
-			        saveButton.setVisible(false);
-			        
-			    } else {
-			    	lockTitleButton.setVisible(false);
-			        lockDescriptionButton.setVisible(false);
-			        saveButton.setVisible(true);
-			    }
+         if (applicationMain.FoundationsMain.activeHomePage == 3) {
+        	    lockTitleButton.setVisible(true);
+        	    lockDescriptionButton.setVisible(true);
+
+        	    titleText.setEditable(false);
+        	    lessonText.setEditable(false);
+        	    saveButton.setVisible(false);
+
+        	    curatorInfoLabel.setVisible(true);
+        	    curatorInfoText.setVisible(true);
+        	    saveCuratorInfoButton.setVisible(true);
+
+        	    curatorInfoText.setText(
+        	            lesson.getCuratorAdditionalInformation() == null
+        	            ? ""
+        	            : lesson.getCuratorAdditionalInformation());
+
+         } else {
+        	    lockTitleButton.setVisible(false);
+        	    lockDescriptionButton.setVisible(false);
+        	    saveButton.setVisible(true);
+
+        	    curatorInfoLabel.setVisible(false);
+        	    curatorInfoText.setVisible(false);
+        	    saveCuratorInfoButton.setVisible(false);
+        	}
 				
 		//The part below could be changed depending on how we implement Curator. This part so far works as if 
 		//The curator and contributor see the same page but if they have a different View then the Curret user check could be removed		
 		//Check to see if It is the original author and if the title or description has to be locked		
-				if (!theDatabase.isCurator(currentUser)) {
+                  if (applicationMain.FoundationsMain.activeHomePage != 3) {
 
 				    if (lesson.getIsTitleLocked() && currentUser.equals(lesson.getAuthor())) {
 				        System.out.println("Title is locked");
@@ -148,6 +169,7 @@ public class ViewViewLesson {
     	
     	// LABEL UI:
     	setupLabelUI(topLabel, "Arial", 28, width, Pos.CENTER, 0, 15);
+    	setupLabelUI(curatorInfoLabel, "Arial", 16, 300, Pos.CENTER_LEFT, 150, 400);
     	setupLabelUI(titleLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 62);
     	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 105);
 
@@ -155,6 +177,7 @@ public class ViewViewLesson {
     	setupButtonUI(saveButton, "Dialog", 18, 150, Pos.CENTER, 240, 540);
     	setupButtonUI(lockTitleButton, "Dialog", 18, 150, Pos.CENTER, 440, 540);
     	setupButtonUI(lockDescriptionButton, "Dialog", 18, 150, Pos.CENTER, 640, 540);
+    	setupButtonUI(saveCuratorInfoButton, "Dialog", 16, 180, Pos.CENTER, 670, 450);
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
@@ -165,9 +188,14 @@ public class ViewViewLesson {
     	// TEXT AREA UI:
     	lessonText.setWrapText(true);
         lessonText.setPrefWidth(500);
-        lessonText.setPrefHeight(340);
+        lessonText.setPrefHeight(250);
     	lessonText.setLayoutX(150);
     	lessonText.setLayoutY(140);
+    	curatorInfoText.setWrapText(true);
+    	curatorInfoText.setPrefWidth(500);
+    	curatorInfoText.setPrefHeight(80);
+    	curatorInfoText.setLayoutX(150);
+    	curatorInfoText.setLayoutY(430);
     	
     	// ALERTS:
     	saveAlert.setTitle("Save Lesson Edits");
@@ -184,9 +212,9 @@ public class ViewViewLesson {
     	returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
     	lockTitleButton.setOnAction((_) -> {ControllerViewLesson.performTitleLock(theLesson); }); // TP2
     	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
-    	
+    	saveCuratorInfoButton.setOnAction((_) -> {ControllerViewLesson.performSaveCuratorInfo(theLesson);});
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, saveButton, returnButton);
+    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, curatorInfoLabel, curatorInfoText, saveCuratorInfoButton, saveButton, returnButton, lockTitleButton, lockDescriptionButton);
 	}
 	
     // copy pasted again

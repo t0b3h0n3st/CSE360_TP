@@ -35,6 +35,7 @@ public class LessonsLearned {
 	private String author;
 	private String lessonTitle;
 	private String lessonText; 
+	private String curatorAdditionalInformation;
 	private int lessonID; 
 	private boolean isTitleLocked;
 	private boolean isDescriptionLocked;
@@ -62,6 +63,17 @@ public class LessonsLearned {
 		this.author = author;
 		this.lessonTitle = lessonTitle;
 		this.lessonText = lessonText;
+	}
+	
+	
+	public LessonsLearned(String author, String lessonTitle, String lessonText,
+	        int lessonID, String curatorAdditionalInformation) {
+
+	    this.author = author;
+	    this.lessonTitle = lessonTitle;
+	    this.lessonText = lessonText;
+	    this.lessonID = lessonID;
+	    this.curatorAdditionalInformation = curatorAdditionalInformation;
 	}
 	
 	/**
@@ -94,6 +106,9 @@ public class LessonsLearned {
 	/** @return the body text of this lesson */
 	public String getLessonText() { return this.lessonText; }
 	
+	/** @return the additional information added by the curator */
+	public String getCuratorAdditionalInformation() { return this.curatorAdditionalInformation; }
+	
 	/** @return the database-assigned ID of this lesson ({@code 0} if not yet stored) */
 	public int getLessonID() { return this.lessonID; }
 	
@@ -111,6 +126,9 @@ public class LessonsLearned {
 	
 	/** @param lessonTitle the new title of this lesson */
 	public void setLessonText(String lessonText) { this.lessonText = lessonText; }
+	
+	/** @param curatorAdditionalInformation additional information added by the curator */
+	public void setCuratorAdditionalInformation(String curatorAdditionalInformation) { this.curatorAdditionalInformation = curatorAdditionalInformation; }
 	
 	/** @param lessonID the database-assigned ID of this lesson */
 	public void setLessonID(int lessonID) { this.lessonID = lessonID; }
