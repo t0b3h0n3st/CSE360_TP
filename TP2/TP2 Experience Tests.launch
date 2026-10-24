@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="TP2" />
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="applicationMain.ExperienceTestbed" />
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="FoundationsF26" />
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:/TP2}" />
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--add-modules javafx.controls --enable-native-access=javafx.graphics" />
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="false" />
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false" />
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/TP2/src/applicationMain/ExperienceTestbed.java" />
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1" />
+    </listAttribute>
+</launchConfiguration>

@@ -66,11 +66,11 @@ public class ViewViewLesson {
 	
 	// BUTTONS:
 	protected static Button saveButton = new Button("Save Edits");
-	protected static Button saveCuratorInfoButton =
-	        new Button("Save Curator Info");
-	
-	
+	protected static Button saveCuratorInfoButton = new Button("Save Curator Info");
 	protected static Button returnButton = new Button("Return");
+	
+	/** Opens attempt history without changing the lesson title or description. */
+	protected static Button experienceButton = new Button("Experience Information");
 	public static Button lockTitleButton = new Button("Lock Title");
 	public static Button lockDescriptionButton = new Button("Lock Description");
 	
@@ -107,6 +107,7 @@ public class ViewViewLesson {
 		theStage = ps;
 		theUser = user;
 		theLesson = lesson; // theLesson variable will be used when passing into other args into controller.
+
 		category.setValue(theLesson.getCategory());
 		
 		// automatically fill in the fields:
@@ -132,12 +133,19 @@ public class ViewViewLesson {
 	        	            lesson.getCuratorAdditionalInformation() == null
 	        	            ? ""
 	        	            : lesson.getCuratorAdditionalInformation());
+	        	    
+	        	    // CURATORS - set experience information button false
+	        	    experienceButton.setVisible(false);
+	        	    
 			    } else {
 			    	lockTitleButton.setVisible(false);
 			        lockDescriptionButton.setVisible(false);
 	        	    curatorInfoLabel.setVisible(false);
 	        	    curatorInfoText.setVisible(false);
 	        	    saveCuratorInfoButton.setVisible(false);
+	        	    
+	        	    // [HUICHANG CODE], can change this - but should experienceButton only be visible for contributors?
+	        	    experienceButton.setVisible(true);
 			    }
 		
 		//The part below could be changed depending on how we implement Curator. This part so far works as if 
@@ -199,6 +207,7 @@ public class ViewViewLesson {
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
+		setupButtonUI(experienceButton, "Dialog", 18, 250, Pos.CENTER, 20, 495);
     	
        	// TEXT FIELD UI:
     	setupTextUI(titleText, "Arial", 16, 400, Pos.CENTER_LEFT, 280, 60, true);
@@ -233,13 +242,16 @@ public class ViewViewLesson {
     	
     	// BUTTON ACTIONS:		
     	saveButton.setOnAction((_) -> {ControllerViewLesson.performSave(theLesson, theUser);}); // CREATE BUTTON:
-    	returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
+		returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
+		experienceButton.setOnAction((_) -> guiExperience.ViewExperience.displayExperience(theStage, theUser, theLesson));
     	lockTitleButton.setOnAction((_) -> {ControllerViewLesson.performTitleLock(theLesson); }); // TP2
     	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
     	saveCuratorInfoButton.setOnAction((_) -> {ControllerViewLesson.performSaveCuratorInfo(theLesson);});
     	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, category, categoryLabel, curatorInfoLabel, curatorInfoText, saveCuratorInfoButton, saveButton, returnButton, lockTitleButton, lockDescriptionButton);
+
+    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, category, categoryLabel, curatorInfoLabel, 
+    			curatorInfoText, saveCuratorInfoButton, saveButton, returnButton, lockTitleButton, lockDescriptionButton, experienceButton);
 	}
 	
     // copy pasted again
