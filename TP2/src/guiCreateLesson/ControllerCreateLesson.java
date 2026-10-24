@@ -18,7 +18,6 @@ import javafx.stage.Stage;
  * {@link ViewCreateLesson}, validates them through {@link ModelCreateLesson}, and stores
  * new lessons in the database.</p>
  *
- * @author who do i put here?
  * @version 2.0
  */
 

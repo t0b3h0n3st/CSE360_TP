@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * objects. It is used to pass groups of lessons (for example, all lessons written by one
  * author) between the database layer and the GUI.</p>
  *
- * @author Harrison
  * @version 2.0
  * @see LessonsLearned
  */

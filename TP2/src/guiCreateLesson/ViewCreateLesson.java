@@ -35,7 +35,6 @@ import javafx.scene.control.TextArea;
  * Home page. The widgets are static and the layout is built once, the first time the page is
  * displayed.</p>
  *
- * @author who do I put here?
  * @version 2.0
  * @see ControllerCreateLesson
  * @see ModelCreateLesson
