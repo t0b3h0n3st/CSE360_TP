@@ -270,47 +270,20 @@ public class Database {
 			
 			// only set the author, title, and text.
 			// ID should stay the same no matter what.
-			String query = "UPDATE lessons SET author = ?, title = ?, text = ?, category = ? WHERE id = ?";
+			String query = "UPDATE lessons SET author = ?, title = ?, text = ?, category = ?, curatorAdditionalInformation = ? WHERE id = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 				pstmt.setString(1, lesson.getAuthor());
 				pstmt.setString(2, lesson.getLessonTitle());
 				pstmt.setString(3, lesson.getLessonText());
 				pstmt.setString(4,  lesson.getCategory().name());
-				pstmt.setInt(5, id);
+				pstmt.setString(5,  lesson.getCuratorAdditionalInformation());
+				pstmt.setInt(6, id);
 				return pstmt.executeUpdate() == 1; // should only be unique rows affected.
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
 				return false;
 			}
-		}
-		
-		
-		/**
-		 * Updates the additional information added by a Curator
-		 * for a specific lesson.
-		 *
-		 * @param id the ID of the lesson
-		 * @param curatorAdditionalInformation the additional information added by the Curator
-		 * @return true if the information was updated successfully
-		 */
-		public boolean updateCuratorAdditionalInformation(
-		        int id, String curatorAdditionalInformation) {
-
-		    String query =
-		            "UPDATE lessons SET curatorAdditionalInformation = ? WHERE id = ?";
-
-		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-
-		        pstmt.setString(1, curatorAdditionalInformation);
-		        pstmt.setInt(2, id);
-
-		        return pstmt.executeUpdate() == 1;
-		    }
-		    catch (SQLException e) {
-		        e.printStackTrace();
-		        return false;
-		    }
 		}
 		
 		

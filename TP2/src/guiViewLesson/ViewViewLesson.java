@@ -66,7 +66,7 @@ public class ViewViewLesson {
 	
 	// BUTTONS:
 	protected static Button saveButton = new Button("Save Edits");
-	protected static Button saveCuratorInfoButton = new Button("Save Curator Info");
+	// protected static Button saveCuratorInfoButton = new Button("Save Curator Info");
 	protected static Button returnButton = new Button("Return");
 	
 	/** Opens attempt history without changing the lesson title or description. */
@@ -128,11 +128,9 @@ public class ViewViewLesson {
 			        // CURATOR INFORMATION BOX: 
 	        	    curatorInfoLabel.setVisible(true);
 	        	    curatorInfoText.setVisible(true);
-	        	    saveCuratorInfoButton.setVisible(true);
 	        	    curatorInfoText.setText(
 	        	            lesson.getCuratorAdditionalInformation() == null
-	        	            ? ""
-	        	            : lesson.getCuratorAdditionalInformation());
+	        	            ? "" : lesson.getCuratorAdditionalInformation());
 	        	    
 	        	    // CURATORS - set experience information button false
 	        	    experienceButton.setVisible(false);
@@ -142,30 +140,26 @@ public class ViewViewLesson {
 			        lockDescriptionButton.setVisible(false);
 	        	    curatorInfoLabel.setVisible(false);
 	        	    curatorInfoText.setVisible(false);
-	        	    saveCuratorInfoButton.setVisible(false);
 	        	    
 	        	    // [HUICHANG CODE], can change this - but should experienceButton only be visible for contributors?
 	        	    experienceButton.setVisible(true);
 			    }
 		
-		//The part below could be changed depending on how we implement Curator. This part so far works as if 
-		//The curator and contributor see the same page but if they have a different View then the current user check could be removed		
-		//Check to see if It is the original author and if the title or description has to be locked		
 
 				/* --------------------
-				 * [harrison] : removed the condition for author. author check is already handled by the database read operations.
+				 * [harrison/ivan] : removed the condition for author. author check is already handled by the database read operations.
 				 * bug fixed pt 2: made it such that curators can still edit (bug caused by my last change lol)
 				   --------------------*/
 				
 				// if title locked: change the button text. make it uneditable only if they are not a curator.
 				if (lesson.getIsTitleLocked()) {
-					 System.out.println("Title is locked");
+					 // DEBUGGING: System.out.println("Title is locked");
 					 ViewViewLesson.lockTitleButton.setText("Unlock Title");
-					 if (!theDatabase.isCurator(theUser.getUserName())) 
+					 if (!theDatabase.isCurator(theUser.getUserName())) // makes it so that the curators can still fields that they locked.
 						 titleText.setEditable(false);
 				} else {
+					// DEBUGGING: System.out.println("Title is not locked");
 					ViewViewLesson.lockTitleButton.setText("Lock Title");
-					System.out.println("Title is not locked");
 					titleText.setEditable(true);
 				}
 				
@@ -203,7 +197,7 @@ public class ViewViewLesson {
     	setupButtonUI(saveButton, "Dialog", 18, 150, Pos.CENTER, 240, 540);
     	setupButtonUI(lockTitleButton, "Dialog", 18, 150, Pos.CENTER, 440, 540);
     	setupButtonUI(lockDescriptionButton, "Dialog", 18, 150, Pos.CENTER, 640, 540);
-    	setupButtonUI(saveCuratorInfoButton, "Dialog", 16, 180, Pos.CENTER, 670, 450);
+    	// setupButtonUI(saveCuratorInfoButton, "Dialog", 16, 180, Pos.CENTER, 670, 450);
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
@@ -246,12 +240,12 @@ public class ViewViewLesson {
 		experienceButton.setOnAction((_) -> guiExperience.ViewExperience.displayExperience(theStage, theUser, theLesson));
     	lockTitleButton.setOnAction((_) -> {ControllerViewLesson.performTitleLock(theLesson); }); // TP2
     	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
-    	saveCuratorInfoButton.setOnAction((_) -> {ControllerViewLesson.performSaveCuratorInfo(theLesson);});
+    	// saveCuratorInfoButton.setOnAction((_) -> {ControllerViewLesson.performSaveCuratorInfo(theLesson);});
     	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
 
     	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, category, categoryLabel, curatorInfoLabel, 
-    			curatorInfoText, saveCuratorInfoButton, saveButton, returnButton, lockTitleButton, lockDescriptionButton, experienceButton);
+    			curatorInfoText, saveButton, returnButton, lockTitleButton, lockDescriptionButton, experienceButton);
 	}
 	
     // copy pasted again

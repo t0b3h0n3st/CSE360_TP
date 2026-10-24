@@ -104,13 +104,15 @@ public class ViewLessonsHome {
 		    viewButton.setText("View Lesson");
 		}
 		
-		// RETRIEVE LESSON COLLECTION BASED ON THE AUTHOR: (since contributors can only see their own work, the contributor name):
+		
 		LessonsLearnedCollection lessonsCollection;
-
-		if (applicationMain.FoundationsMain.activeHomePage == 3) {
+		
+		if (theDatabase.isCurator(theUser.getUserName())) {
+			// IF CURATOR : RETRIEVE ALL LESSONS, regardless of author name.
 		    lessonsCollection = theDatabase.getAllLessons();
 		}
 		else {
+			// RETRIEVE LESSON COLLECTION BASED ON THE AUTHOR: (since contributors can only see their own work, the contributor name):
 		    lessonsCollection = theDatabase.getLessonByAuthor(theUser.getUserName());
 		}
 		
@@ -118,7 +120,14 @@ public class ViewLessonsHome {
 		
 		// if the list view is empty (user has not created anything), prompt a message:
 		if (list.getItems().isEmpty()) {
-			message.setText("Please create a lesson to see it in the list view.");
+			
+			// added this nice condition : will display a different helpful message to curators vs contributor if lessons list is empty.
+			if (theDatabase.isCurator(theUser.getUserName())) {
+				message.setText("No contributor has created a lesson yet, so there are no lessons to view.");
+			}
+			else {
+				message.setText("Please create a lesson to see it in the list view.");
+			}
 		}
 		else {
 			message.setText("");

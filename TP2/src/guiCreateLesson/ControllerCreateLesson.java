@@ -65,7 +65,8 @@ public class ControllerCreateLesson {
 		}
 		
 		// create the lesson object
-		LessonsLearned lesson = new LessonsLearned(author, title, text, category);
+		// edit: contributors would not have access to curator additional information, so it's just blank
+		LessonsLearned lesson = new LessonsLearned(author, title, text, category, "");
 		
 		// send it to the database:
 		database.addLesson(lesson);

@@ -60,7 +60,7 @@ public class ModelViewLesson {
 		
 		// EMPTY INPUT:
 		if (input == null || input.isBlank()) {
-			msg = "Text cannot be blank. Please enter in text.";
+			msg = ""; // if it's empty, it'll still pass, so it's optional.
 		}
 		
 		// LENGTH TOO LONG:
@@ -70,6 +70,29 @@ public class ModelViewLesson {
 		
 		else if (input.length() < MIN_LENGTH) {
 			msg = String.format("Text is too short at %d characters. The minimum length is %d characters.", input.length(), MIN_LENGTH);
+		}
+
+		return msg;
+	}
+	
+	public static String validateCuratorText(String input) {
+		final int MAX_LENGTH = 255;
+		final int MIN_LENGTH = 10; // should at least be 10 chars
+		
+		String msg = "";
+		
+		// EMPTY INPUT:
+		if (input == null || input.isBlank()) {
+			msg = "Curator text cannot be blank. Please enter in text.";
+		}
+		
+		// LENGTH TOO LONG:
+		else if (input.length() > MAX_LENGTH) {
+			msg = String.format("Your curator info text is too long at %d characters. The max length is %d characters.", input.length(), MAX_LENGTH);
+		}
+		
+		else if (input.length() < MIN_LENGTH) {
+			msg = String.format("Curator info text is too short at %d characters. The minimum length is %d characters.", input.length(), MIN_LENGTH);
 		}
 
 		return msg;

@@ -38,10 +38,20 @@ public class ControllerViewLesson {
 	 * @param theUser the currently logged-in user
 	 */
 	
+	/* -----------------------------------------------------------------------------
+	 * [HARRISON] Merged Angel's perform curator save code into here. Just a single button.
+	 * Saving curator notes is optional.
+	   ----------------------------------------------------------------------------- */
 	protected static void performSave(LessonsLearned lesson, User theUser) {
 		// read the text inputs:
 		String title = ViewViewLesson.titleText.getText().trim();
 		String text = ViewViewLesson.lessonText.getText().trim();
+		String curatorText = lesson.getCuratorAdditionalInformation();
+		if (curatorText == null) {
+			curatorText = "";
+		}
+		String curatorTextErr = "";
+		
 		String author = lesson.getAuthor(); // preset by whoever made it:
 		Category category = ViewViewLesson.category.getValue(); // get the value selected in the combo box:
 		
@@ -49,17 +59,23 @@ public class ControllerViewLesson {
 		String titleErr = ModelCreateLesson.validateTitle(title);
 		String textErr = ModelCreateLesson.validateText(text);
 		
+		// IF THEY ARE A CURATOR: check the curator info text.
+		if (database.isCurator(theUser.getUserName())) { 
+		    curatorText = ViewViewLesson.curatorInfoText.getText().trim();
+		    curatorTextErr = ModelViewLesson.validateCuratorText(curatorText);
+		}
+		
 		// check for an error:
 		if (!titleErr.equals("") || !textErr.equals("")) {
 			// display an alert:
-			ViewViewLesson.saveAlert.setContentText(titleErr + "\n" + textErr);
+			ViewViewLesson.saveAlert.setContentText(titleErr + "\n" + textErr + "\n" + curatorTextErr);
 			ViewViewLesson.saveAlert.showAndWait();
 			return;
 		}
 		
 		// if it was the same as original, then dont save and show alert:
 		// updated condition to make it so if they dont update the category too, it doesnt count as a change:
-		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text) && lesson.getCategory() == category) {
+		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text) && lesson.getCategory() == category && lesson.getCuratorAdditionalInformation().trim().equals(curatorText)) {
 			ViewViewLesson.saveAlert.setContentText("You did not make any changes, so there is no need to save.");
 			ViewViewLesson.saveAlert.showAndWait();
 			return;
@@ -75,7 +91,7 @@ public class ControllerViewLesson {
 		}
 		
 		// create a new Lessons object out of the data extracted from text fields that they updated. 
-		LessonsLearned editedLesson = new LessonsLearned(author, title, text, category);
+		LessonsLearned editedLesson = new LessonsLearned(author, title, text, category, curatorText);
 		
 		if (database.updateLesson(lesson.getLessonID(), editedLesson)) {
 			ViewViewLesson.saveAlert.setContentText("Changes changed successfully! Returning to Lessons Learned Home.");
@@ -87,35 +103,7 @@ public class ControllerViewLesson {
 			ViewViewLesson.saveAlert.showAndWait();
 		}
 	}
-	
-	/**
-	 * Saves the additional information entered by the Curator.
-	 *
-	 * @param lesson the lesson being updated
-	 */
-	protected static void performSaveCuratorInfo(LessonsLearned lesson) {
-
-	    String curatorInfo =
-	            ViewViewLesson.curatorInfoText.getText().trim();
-
-	    if (database.updateCuratorAdditionalInformation(
-	            lesson.getLessonID(), curatorInfo)) {
-
-	        lesson.setCuratorAdditionalInformation(curatorInfo);
-
-	        ViewViewLesson.saveAlert.setContentText(
-	                "Curator additional information saved successfully.");
-	        ViewViewLesson.saveAlert.showAndWait();
-	    }
-	    else {
-	        ViewViewLesson.saveAlert.setContentText(
-	                "There was an error with the database. Please try again.");
-	        ViewViewLesson.saveAlert.showAndWait();
-	    }
-	}
-	
-	
-	
+		
 	//TP2
 		// I should also buttons to remove the lock
 		/**
@@ -183,7 +171,7 @@ public class ControllerViewLesson {
 			lesson.setIsDescriptionLocked(true); //updates in the LessonsLearned
 			
 			// [HARRISON]:
-			// on the first time locking, make it such that it still allows curators to edit it.
+			// on the first time locking, make it such that it still allows curators to edit it (if they don't refresh the page)
 				if (!database.isCurator(ViewViewLesson.theUser.getUserName()))
 			ViewViewLesson.lessonText.setEditable(false);
 			
@@ -208,12 +196,8 @@ public class ControllerViewLesson {
 			
 		}
 		
-		
-		
-		
-		
-		
 		//End of TP2
+		
 		/**
 		 * Handles the Return button by navigating back to the Lessons Learned Home page without
 		 * saving any pending edits.
