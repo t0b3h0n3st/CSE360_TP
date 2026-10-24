@@ -1,6 +1,6 @@
 package guiLessonsHome;
 
-import java.util.ArrayList;		
+import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
@@ -94,8 +94,26 @@ public class ViewLessonsHome {
 		
 		userLabel.setText("User: " + theUser.getUserName());
 		
+		// TP2: Set buttons based on the current role
+		if (applicationMain.FoundationsMain.activeHomePage == 3) {
+		    createButton.setVisible(false);
+		    viewButton.setText("View Lesson");
+		}
+		else {
+		    createButton.setVisible(true);
+		    viewButton.setText("View Lesson");
+		}
+		
 		// RETRIEVE LESSON COLLECTION BASED ON THE AUTHOR: (since contributors can only see their own work, the contributor name):
-		LessonsLearnedCollection lessonsCollection = theDatabase.getLessonByAuthor(theUser.getUserName());
+		LessonsLearnedCollection lessonsCollection;
+
+		if (applicationMain.FoundationsMain.activeHomePage == 3) {
+		    lessonsCollection = theDatabase.getAllLessons();
+		}
+		else {
+		    lessonsCollection = theDatabase.getLessonByAuthor(theUser.getUserName());
+		}
+		
 		fillList(list, lessonsCollection.getLessons());
 		
 		// if the list view is empty (user has not created anything), prompt a message:
@@ -181,8 +199,17 @@ public class ViewLessonsHome {
 		list.getItems().clear(); // clear everytime this method is refreshed (so it doesnt duplicate)
 		for (int i = 0; i < lessonsList.size(); i++) {
 			String title = lessonsList.get(i).getLessonTitle();
+			String category = lessonsList.get(i).getCategory().name();
 			String id = String.valueOf(lessonsList.get(i).getLessonID());
-			String row = String.format("%s (ID: %s)", title, id);
+			
+			// String row = String.format("%s / %s (ID: %s)", title, category, id);
+			String row = String.format("%s / %s", title, category);
+			
+			// UI update: include author names if it's a curator. no need for contributors, since they can only see their own.
+			if (theDatabase.isCurator(theUser.getUserName())) {
+				row += String.format(" / by %s", lessonsList.get(i).getAuthor());
+			}
+			row += String.format(" (ID: %s)", id);
 			list.getItems().add(row);
 		}
 	}

@@ -1,10 +1,11 @@
 package database;
 
-import java.sql.*;	
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import entityClasses.Category;
 import entityClasses.LessonsLearned;
 import entityClasses.LessonsLearnedCollection;
 import entityClasses.User;
@@ -88,15 +89,21 @@ public class Database {
 	 *
 	 * @param lesson the lesson to store
 	 */
-	
+		
+	/*
+	 * UPDATE TO ADJUST FOR THE NEW PROPERTIES:
+	 */
 		public void addLesson(LessonsLearned lesson) {
-			String addQuery = "INSERT INTO lessons (author, title, text) " + "VALUES (?, ?, ?)";
+			String addQuery = "INSERT INTO lessons (author, title, text, category, curatorAdditionalInformation) " + "VALUES (?, ?, ?, ?, ?)";
 			// see if we can execute the query: 
 			try (PreparedStatement pstmt = connection.prepareStatement(addQuery)) {
 				// set the right parameters safely using prepared statement: 
 				pstmt.setString(1, lesson.getAuthor());
 				pstmt.setString(2, lesson.getLessonTitle());
 				pstmt.setString(3, lesson.getLessonText());
+				pstmt.setString(4, lesson.getCategory().name()); // get the category as a name:
+				pstmt.setString(5,  lesson.getCuratorAdditionalInformation()); // added this in : need to store the curator information too.
+				
 				// execute the query:
 				pstmt.executeUpdate(); // 
 			}
@@ -107,9 +114,44 @@ public class Database {
 		
 		// R: read lessons from the database
 		
-	//TP2: Changed both get methods to include whether or not the title is locked or unlocked
+		/**
+		 * Returns all lessons stored in the database.
+		 * This is used by the Curator because Curators can view
+		 * lessons created by all contributors.
+		 *
+		 * @return a collection containing all lessons in the database
+		 */
 		
+		public LessonsLearnedCollection getAllLessons() {
+		    String query = "SELECT * FROM lessons";
+		    LessonsLearnedCollection lessonList = new LessonsLearnedCollection();
+
+		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+		        ResultSet rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            int id = rs.getInt("id");
+		            String author = rs.getString("author");
+		            String title = rs.getString("title");
+		            String text = rs.getString("text");
+					String category_String = rs.getString("category");
+					Category category = Category.fromString(category_String);
+					String curatorInfo = rs.getString("curatorAdditionalInformation");
+					Boolean titleLocked = rs.getBoolean("isTitleLocked");
+					Boolean descriptionLocked = rs.getBoolean("isDescriptionLocked");
+					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked");
+					LessonsLearned lesson = new LessonsLearned(author, title, text, category, curatorInfo, id, titleLocked, descriptionLocked, lessonLocked_i);
+		            lessonList.addLesson(lesson);
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return lessonList;
+		}
 		
+	
 			/**
 			 * Retrieves every lesson written by the given author.
 			 *
@@ -118,7 +160,6 @@ public class Database {
 			 *         the collection is empty if the author has no lessons or a database error
 			 *         occurs
 			 */
-		
 		
 		public LessonsLearnedCollection getLessonByAuthor(String author) {
 			// select ALL rows that have that author's name:
@@ -133,13 +174,25 @@ public class Database {
 				while (rs.next()) {
 					LessonsLearned lesson;
 					// extract a LessonsLearned object for each row:
+					
+					// BASE LESSON ATTRIBUTES:
 					int id_i = rs.getInt("id");
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i, lessonLocked_i);
 					
+					// CATEGORY ATTRIBUTES:
+					String category = rs.getString("category");
+					
+					// CURATOR ATTRIBUTES:
+					String curatorInfo_i = rs.getString("curatorAdditionalInformation");
+					Category category_i = Category.fromString(category);
+					
+					// LOCK ATTRIBUTES:
+					Boolean titleLocked_i = rs.getBoolean("isTitleLocked");
+					Boolean descriptionLocked_i = rs.getBoolean("isDescriptionLocked");
+					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked");
+					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, curatorInfo_i, id_i, titleLocked_i, descriptionLocked_i, lessonLocked_i);
 					// finally, add that LessonsLearned object to the list.
 					lessonList.addLesson(lesson);
 				}
@@ -178,8 +231,14 @@ public class Database {
 					String author_i = rs.getString("author");
 					String title_i = rs.getString("title");
 					String text_i = rs.getString("text");
-					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked");
-					lesson = new LessonsLearned(author_i, title_i, text_i, id_i, lessonLocked_i);
+					String category = rs.getString("category");
+					Category category_i = Category.fromString(category);
+					String curatorInfo_i = rs.getString("curatorAdditionalInformation");
+					Boolean titleLocked_i = rs.getBoolean("isTitleLocked");
+					Boolean descriptionLocked_i = rs.getBoolean("isDescriptionLocked");
+					Boolean lessonLocked_i = rs.getBoolean("isLessonLocked"); // [Ivan new addition]
+					
+					lesson = new LessonsLearned(author_i, title_i, text_i, category_i, curatorInfo_i, id_i, titleLocked_i, descriptionLocked_i, lessonLocked_i);
 					return lesson;
 				}
 				else {
@@ -202,16 +261,21 @@ public class Database {
 		 *         that ID or a database error occurs
 		 */
 		
+		/*
+		 * NEEDS TO BE FIXED:
+		 */
+		
 		public boolean updateLesson(int id, LessonsLearned lesson) {
 			
 			// only set the author, title, and text.
 			// ID should stay the same no matter what.
-			String query = "UPDATE lessons SET author = ?, title = ?, text = ? WHERE id = ?";
+			String query = "UPDATE lessons SET author = ?, title = ?, text = ?, category = ? WHERE id = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 				pstmt.setString(1, lesson.getAuthor());
 				pstmt.setString(2, lesson.getLessonTitle());
 				pstmt.setString(3, lesson.getLessonText());
-				pstmt.setInt(4, id);
+				pstmt.setString(4,  lesson.getCategory().name());
+				pstmt.setInt(5, id);
 				return pstmt.executeUpdate() == 1; // should only be unique rows affected.
 			}
 			catch (SQLException e) {
@@ -219,6 +283,35 @@ public class Database {
 				return false;
 			}
 		}
+		
+		
+		/**
+		 * Updates the additional information added by a Curator
+		 * for a specific lesson.
+		 *
+		 * @param id the ID of the lesson
+		 * @param curatorAdditionalInformation the additional information added by the Curator
+		 * @return true if the information was updated successfully
+		 */
+		public boolean updateCuratorAdditionalInformation(
+		        int id, String curatorAdditionalInformation) {
+
+		    String query =
+		            "UPDATE lessons SET curatorAdditionalInformation = ? WHERE id = ?";
+
+		    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+		        pstmt.setString(1, curatorAdditionalInformation);
+		        pstmt.setInt(2, id);
+
+		        return pstmt.executeUpdate() == 1;
+		    }
+		    catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+		
 		
 		/**
 		 * Deletes the lesson with the given ID.
@@ -542,7 +635,6 @@ public class Database {
 	//
 		
 		
-		 
         statement.execute("ALTER TABLE userDB ADD COLUMN IF NOT EXISTS " 
                 + "adminRole BOOL DEFAULT FALSE");
         statement.execute("ALTER TABLE userDB ADD COLUMN IF NOT EXISTS "
@@ -560,16 +652,26 @@ public class Database {
         /* -----------------
          * [HARRISON] HW2:
            ----------------*/
-        // Create the lessons table [id] [author] [title] [text]
+        // Create the lessons table [id] [author] [title] [text] [category] [curatorAddInfo] [isTitleLocked] [isDescLocked] [isLessonLocked]
         String lessonsLearnedTable = "CREATE TABLE IF NOT EXISTS lessons ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY, "
                 + "author VARCHAR(255), "
                 + "title VARCHAR(100), "
-                + "text VARCHAR(255)"
+                + "text VARCHAR(255), "
+                + "category VARCHAR(100), "
+                + "curatorAdditionalInformation VARCHAR(300), "
+                + "isTitleLocked BOOL DEFAULT FALSE, " 
+                + "isDescriptionLocked BOOL DEFAULT FALSE, "
                 + "isLessonLocked BOOL DEFAULT FALSE)";
         statement.execute(lessonsLearnedTable);
+        
+        // [HARRISON] in case your database files do not include the rows in the table:
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS category VARCHAR(100)");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS curatorAdditionalInformation VARCHAR(300)");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS isTitleLocked BOOL DEFAULT FALSE");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS isDescriptionLocked BOOL DEFAULT FALSE");
+        statement.execute("ALTER TABLE lessons ADD COLUMN IF NOT EXISTS isLessonLocked BOOL DEFAULT FALSE");
 	}	
-
 
 /*******
  * <p> Method: isDatabaseEmpty </p>
@@ -1479,9 +1581,9 @@ public class Database {
 	    	currentLastName = rs.getString(6);
 	    	currentPreferredFirstName = rs.getString(7);
 	    	currentEmailAddress = rs.getString(8);
-	    	currentAdminRole = rs.getBoolean(9);
-	    	currentContributorRole = rs.getBoolean(10);
-	    	currentCuratorRole = rs.getBoolean(11);
+	    	currentAdminRole = rs.getBoolean("adminRole");
+	    	currentContributorRole = rs.getBoolean("contributorRole");
+	    	currentCuratorRole = rs.getBoolean("curatorRole");
 	    	currentIsOneTimePassword = rs.getBoolean("isOneTimePassword");
 			return true;
 	    } catch (SQLException e) {

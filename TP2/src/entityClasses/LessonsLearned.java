@@ -35,10 +35,14 @@ public class LessonsLearned {
 	private String author;
 	private String lessonTitle;
 	private String lessonText; 
+	private String curatorAdditionalInformation;
 	private int lessonID; 
 	private boolean isTitleLocked;
 	private boolean isDescriptionLocked;
 	private boolean isLessonLocked;
+	
+	// new attributes (merged from Tiana's code:)
+	private Category category;
 	
 	/**
 	 * Default constructor. It is private and intentionally unused so that a lesson cannot be
@@ -57,12 +61,25 @@ public class LessonsLearned {
 	 * @param author the username of the contributor who wrote the lesson
 	 * @param lessonTitle the title of the lesson
 	 * @param lessonText the body text of the lesson
+	 * @param category the category of the lesson
 	 */
 	
-	public LessonsLearned(String author, String lessonTitle, String lessonText) {
+	/*
+	 * 
+	 */
+	public LessonsLearned(String author, String lessonTitle, String lessonText, Category category) {
 		this.author = author;
 		this.lessonTitle = lessonTitle;
 		this.lessonText = lessonText;
+		this.category = category;
+	}
+	
+	/* ------
+	 * [ANGEL]: constructor for curators editing a lesson
+	   ------*/
+	public LessonsLearned(String author, String lessonTitle, String lessonText,  Category category, String curatorAdditionalInformation) {
+	    this(author, lessonTitle, lessonText, category);
+	    this.curatorAdditionalInformation = curatorAdditionalInformation;
 	}
 	
 	/**
@@ -72,17 +89,18 @@ public class LessonsLearned {
 	 * @param author the username of the contributor who wrote the lesson
 	 * @param lessonTitle the title of the lesson
 	 * @param lessonText the body text of the lesson
+	 * @param category the category of the lesson
 	 * @param lessonID the unique ID assigned to the lesson by the database
 	 * @param isTitleLocked {@code true} if the title is locked against editing
 	 * @param isDescriptionLocked {@code true} if the description is locked against editing
 	 * @param isLessonLocked {@code true} if the lesson is locked
 	 */
-	
-	public LessonsLearned(String author, String lessonTitle, String lessonText, int lessonID, boolean isLessonLocked) {
-		this.author = author;
-		this.lessonTitle = lessonTitle;
-		this.lessonText = lessonText;
+
+	public LessonsLearned(String author, String lessonTitle, String lessonText, Category category, String curatorAdditionalInformation, int lessonID, boolean isTitleLocked, boolean isDescriptionLocked, boolean isLessonLocked) {
+		this(author, lessonTitle, lessonText, category, curatorAdditionalInformation);
 		this.lessonID = lessonID;
+		this.isTitleLocked = isTitleLocked;
+		this.isDescriptionLocked = isDescriptionLocked;
 		this.isLessonLocked = isLessonLocked;
 	}
 	
@@ -97,6 +115,9 @@ public class LessonsLearned {
 	/** @return the body text of this lesson */
 	public String getLessonText() { return this.lessonText; }
 	
+	/** @return the additional information added by the curator */
+	public String getCuratorAdditionalInformation() { return this.curatorAdditionalInformation; }
+	
 	/** @return the database-assigned ID of this lesson ({@code 0} if not yet stored) */
 	public int getLessonID() { return this.lessonID; }
 	
@@ -106,9 +127,16 @@ public class LessonsLearned {
 	/** @return {@code true} if the description is locked against editing, {@code false} otherwise */
 	public boolean getIsDescriptionLocked() {return this.isDescriptionLocked;}
 	
+
 	/** @return {@code true} if the lesson is locked, {@code false} otherwise */
 	public boolean getIsLessonLocked() {return this.isLessonLocked;}
 	
+	/**
+	 * 
+	 * @return the Category of the lesson
+	 */
+	public Category getCategory() { return this.category; }
+
 	
 	// SETTERS:
 	
@@ -117,6 +145,9 @@ public class LessonsLearned {
 	
 	/** @param lessonTitle the new title of this lesson */
 	public void setLessonText(String lessonText) { this.lessonText = lessonText; }
+	
+	/** @param curatorAdditionalInformation additional information added by the curator */
+	public void setCuratorAdditionalInformation(String curatorAdditionalInformation) { this.curatorAdditionalInformation = curatorAdditionalInformation; }
 	
 	/** @param lessonID the database-assigned ID of this lesson */
 	public void setLessonID(int lessonID) { this.lessonID = lessonID; }

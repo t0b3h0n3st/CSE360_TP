@@ -1,6 +1,7 @@
 package guiCreateLesson;
 
 import entityClasses.User;
+import entityClasses.Category;
 import guiDeleteUser.ViewDeleteUser;
 import guiLessonsHome.ViewLessonsHome;
 import entityClasses.LessonsLearned;
@@ -41,6 +42,7 @@ public class ControllerCreateLesson {
 		String title = ViewCreateLesson.lessonTitle.getText().trim();
 		String text = ViewCreateLesson.lessonText.getText().trim();
 		String author = theUser.getUserName(); // automatically set
+		Category category = ViewCreateLesson.category.getValue(); // get the value selected in the combo box:
 		
 		// VALIDATE ALL TEXT FIELDS NEEDED (LENGTH CHECKS)
 		String titleErr = ModelCreateLesson.validateTitle(title);
@@ -64,7 +66,7 @@ public class ControllerCreateLesson {
 		}
 		
 		// create the lesson object
-		LessonsLearned lesson = new LessonsLearned(author, title, text);
+		LessonsLearned lesson = new LessonsLearned(author, title, text, category);
 		
 		// send it to the database:
 		database.addLesson(lesson);

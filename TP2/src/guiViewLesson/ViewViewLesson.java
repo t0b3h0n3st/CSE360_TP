@@ -2,6 +2,7 @@ package guiViewLesson;
 
 import database.Database;
 import entityClasses.User;
+import entityClasses.Category;
 import entityClasses.LessonsLearned;
 import guiLessonsHome.ControllerLessonsHome;
 import guiLessonsHome.ViewLessonsHome;
@@ -10,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -30,6 +32,10 @@ import javafx.scene.control.TextArea;
  * @version 2.0
  * @see ControllerViewLesson
  * @see ModelViewLesson
+ */
+
+/* 
+ * NOTE TO SELF: EDIT UPDATING LESSOn, CATEGORY CHANGE COUNTS AS DIFFERENT
  */
 public class ViewViewLesson {
 	// APPLICATION WINDOW DIMENSIONS:
@@ -55,8 +61,15 @@ public class ViewViewLesson {
 	protected static Label titleLabel = new Label("Title: ");
 	protected static Label lessonsLabel = new Label("Lessons Learned: ");
 	
+	protected static Label curatorInfoLabel =
+	        new Label("Curator Additional Information: ");
+	
 	// BUTTONS:
 	protected static Button saveButton = new Button("Save Edits");
+	protected static Button saveCuratorInfoButton =
+	        new Button("Save Curator Info");
+	
+	
 	protected static Button returnButton = new Button("Return");
 	public static Button lockTitleButton = new Button("Lock Title");
 	public static Button lockDescriptionButton = new Button("Lock Description");
@@ -64,12 +77,20 @@ public class ViewViewLesson {
 	// TEXT FIELDS:
 	protected static TextField titleText = new TextField();
 	protected static TextArea lessonText = new TextArea();
+	protected static TextArea curatorInfoText = new TextArea();
 	
 	// ALERTS:
 	protected static Alert saveAlert = new Alert(AlertType.INFORMATION);
 	protected static Alert saveConfirm = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
 	
 	protected static Alert lockAlert = new Alert(AlertType.INFORMATION);
+	
+	/* ---------------------------------------------
+	 * adding in combo box for category selection:
+	   --------------------------------------------- */
+	// COMBO BOX (Category):
+	protected static Label categoryLabel = new Label("Select a category: ");
+	protected static ComboBox <Category> category;
 	
 	/**
 	 * Displays the View / Edit Lesson page for a lesson. The fields are filled in from the
@@ -86,52 +107,73 @@ public class ViewViewLesson {
 		theStage = ps;
 		theUser = user;
 		theLesson = lesson; // theLesson variable will be used when passing into other args into controller.
+		category.setValue(theLesson.getCategory());
 		
 		// automatically fill in the fields:
 		titleText.setText(lesson.getLessonTitle());
 		lessonText.setText(lesson.getLessonText());
 		
-		System.out.println("This is a test");
-		
-String currentUser = theUser.getUserName();
-		
+		String currentUser = theUser.getUserName();
+
 		//TP2: This checks to see if the role is curator or not
 				if (theDatabase.isCurator(currentUser)) {
 			        lockTitleButton.setVisible(true);
 			        lockDescriptionButton.setVisible(true);
+			        
+			        // every time the curator enters the page: it'll be editable for them (fixes bug where you log in as contributor first)
+			        titleText.setEditable(true);
+			        lessonText.setEditable(true);
+			        
+			        // CURATOR INFORMATION BOX: 
+	        	    curatorInfoLabel.setVisible(true);
+	        	    curatorInfoText.setVisible(true);
+	        	    saveCuratorInfoButton.setVisible(true);
+	        	    curatorInfoText.setText(
+	        	            lesson.getCuratorAdditionalInformation() == null
+	        	            ? ""
+	        	            : lesson.getCuratorAdditionalInformation());
 			    } else {
 			    	lockTitleButton.setVisible(false);
 			        lockDescriptionButton.setVisible(false);
+	        	    curatorInfoLabel.setVisible(false);
+	        	    curatorInfoText.setVisible(false);
+	        	    saveCuratorInfoButton.setVisible(false);
 			    }
-				
+		
 		//The part below could be changed depending on how we implement Curator. This part so far works as if 
-		//The curator and contributor see the same page but if they have a different View then the Curret user check could be removed		
+		//The curator and contributor see the same page but if they have a different View then the current user check could be removed		
 		//Check to see if It is the original author and if the title or description has to be locked		
-				if (lesson.getIsTitleLocked() && currentUser.equals(lesson.getAuthor())) {
+
+				/* --------------------
+				 * [harrison] : removed the condition for author. author check is already handled by the database read operations.
+				 * bug fixed pt 2: made it such that curators can still edit (bug caused by my last change lol)
+				   --------------------*/
+				
+				// if title locked: change the button text. make it uneditable only if they are not a curator.
+				if (lesson.getIsTitleLocked()) {
 					 System.out.println("Title is locked");
 					 ViewViewLesson.lockTitleButton.setText("Unlock Title");
-					titleText.setEditable(false);
+					 if (!theDatabase.isCurator(theUser.getUserName())) 
+						 titleText.setEditable(false);
 				} else {
 					ViewViewLesson.lockTitleButton.setText("Lock Title");
 					System.out.println("Title is not locked");
 					titleText.setEditable(true);
 				}
 				
-				if (lesson.getIsDescriptionLocked() && currentUser.equals(lesson.getAuthor())) {
+				// if lesson text locked: change the button text. make it uneditable only if they are not a curator.
+				if (lesson.getIsDescriptionLocked()) {
 					System.out.println("Description is locked");
 					lockDescriptionButton.setText("Unlock Description");
-					lessonText.setEditable(false);
+					if (!theDatabase.isCurator(theUser.getUserName())) 
+						lessonText.setEditable(false);
 				} else {
 					System.out.println("Description is not locked");
 					lockDescriptionButton.setText("Lock Description");
 					lessonText.setEditable(true);
 				}
-				
-		//Check to see if the title/description should be locked
-				
-
 		
-		
+		// show the Stage: 
 	   	theStage.setTitle("View / Edit Lesson");
     	theStage.setScene(theScene);
     	theStage.show();
@@ -144,13 +186,16 @@ String currentUser = theUser.getUserName();
     	
     	// LABEL UI:
     	setupLabelUI(topLabel, "Arial", 28, width, Pos.CENTER, 0, 15);
+    	setupLabelUI(curatorInfoLabel, "Arial", 16, 300, Pos.CENTER_LEFT, 150, 400);
     	setupLabelUI(titleLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 62);
-    	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 105);
+    	setupLabelUI(categoryLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 102);
+    	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 150);
 
     	// BUTTON UI:
     	setupButtonUI(saveButton, "Dialog", 18, 150, Pos.CENTER, 240, 540);
     	setupButtonUI(lockTitleButton, "Dialog", 18, 150, Pos.CENTER, 440, 540);
     	setupButtonUI(lockDescriptionButton, "Dialog", 18, 150, Pos.CENTER, 640, 540);
+    	setupButtonUI(saveCuratorInfoButton, "Dialog", 16, 180, Pos.CENTER, 670, 450);
     	
     	// bottom buttons: 
     	setupButtonUI(returnButton, "Dialog", 18, 200, Pos.CENTER, 20, 540);
@@ -158,12 +203,22 @@ String currentUser = theUser.getUserName();
        	// TEXT FIELD UI:
     	setupTextUI(titleText, "Arial", 16, 400, Pos.CENTER_LEFT, 280, 60, true);
     	
+		// COMBO BOX:
+	    category = new ComboBox<>();
+	    category.getItems().addAll(Category.values());
+		setupComboBoxUI(category, "Dialog", 16, 250, 280, 100);
+    	
     	// TEXT AREA UI:
     	lessonText.setWrapText(true);
         lessonText.setPrefWidth(500);
-        lessonText.setPrefHeight(340);
+        lessonText.setPrefHeight(250);
     	lessonText.setLayoutX(150);
     	lessonText.setLayoutY(140);
+    	curatorInfoText.setWrapText(true);
+    	curatorInfoText.setPrefWidth(500);
+    	curatorInfoText.setPrefHeight(80);
+    	curatorInfoText.setLayoutX(150);
+    	curatorInfoText.setLayoutY(430);
     	
     	// ALERTS:
     	saveAlert.setTitle("Save Lesson Edits");
@@ -174,15 +229,17 @@ String currentUser = theUser.getUserName();
 		// confirmation alert
 		saveConfirm.setTitle("Confirmation");
 		saveConfirm.setHeaderText("Are You Sure?");
+		
     	
     	// BUTTON ACTIONS:		
     	saveButton.setOnAction((_) -> {ControllerViewLesson.performSave(theLesson, theUser);}); // CREATE BUTTON:
     	returnButton.setOnAction((_) -> {ControllerViewLesson.performReturn(); }); // RETURN TO HOME:
     	lockTitleButton.setOnAction((_) -> {ControllerViewLesson.performTitleLock(theLesson); }); // TP2
     	lockDescriptionButton.setOnAction((_) -> {ControllerViewLesson.performDescriptionLock(theLesson); }); // TP2
+    	saveCuratorInfoButton.setOnAction((_) -> {ControllerViewLesson.performSaveCuratorInfo(theLesson);});
     	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, saveButton, returnButton);
+    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, titleText, lessonText, category, categoryLabel, curatorInfoLabel, curatorInfoText, saveCuratorInfoButton, saveButton, returnButton, lockTitleButton, lockDescriptionButton);
 	}
 	
     // copy pasted again
@@ -236,4 +293,12 @@ String currentUser = theUser.getUserName();
 		t.setLayoutY(y);		
 		t.setEditable(e);
 	}	
+	
+	protected static void setupComboBoxUI(ComboBox <Category> c, String ff, double f, double w,
+			double x, double y){
+		c.setStyle("-fx-font: " + f + " " + ff + ";");
+		c.setMinWidth(w);
+		c.setLayoutX(x);
+		c.setLayoutY(y);
+	}
 }
