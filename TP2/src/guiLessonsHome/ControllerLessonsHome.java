@@ -130,8 +130,7 @@ public class ControllerLessonsHome {
 		
 	}
 	
-	
-	//TP2 Lock Lesson Function
+	// [IVAN] TP2 Lock Lesson Function
 		protected static void performLessonLock() {
 			String selectedRow = ViewLessonsHome.list.getSelectionModel().getSelectedItem(); // this line is what gets the selected row String.
 			
@@ -143,25 +142,62 @@ public class ControllerLessonsHome {
 			}
 			
 			// Rows in the form of "[title] (ID: [id])"
-					int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
-					int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring
-					int id = Integer.parseInt(selectedRow.substring(start, end)); // parse the substring which returns the ID value in a string (into an integer)
-		
-					LessonsLearned lesson = database.getLessonByID(id);	
-					
-
-			if (ViewLessonsHome.lockLessonButton.getText() == "Lock Lesson") {
-				ViewLessonsHome.lockLessonButton.setText("Unlock Lesson");	
-			database.lockLesson(lesson.getAuthor(), id); //Update the data in the database
-			lesson.setIsLessonLocked(true); //updates in the LessonsLearned
+			int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
+			int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring
+			int id = Integer.parseInt(selectedRow.substring(start, end)); // parse the substring which returns the ID value in a string (into an integer)
+	
+			LessonsLearned lesson = database.getLessonByID(id);	
 			
-			 return;
-			} else if (ViewLessonsHome.lockLessonButton.getText() == "Unlock Lesson") {
-				ViewLessonsHome.lockLessonButton.setText("Lock Lesson");	
-				database.unlockLesson(lesson.getAuthor(), id); //Update the data in the database
-				lesson.setIsLessonLocked(false); //updates in the LessonsLearned
+			/* ------------------------------------------------------------------
+			 * if lesson locked and you clicked the button -> set it to unlocked.
+			 * if lesson unlocked --> set it to locked on button click.
+			 * you're basically setting it to the opposite value of what it was before (since it's a toggle)
+			   ------------------------------------------------------------------ */
+			lesson.setIsLessonLocked(!lesson.getIsLessonLocked());
+			if (lesson.getIsLessonLocked()) {
+				database.lockLesson(lesson.getAuthor(), id);
+				ViewLessonsHome.lockLessonButton.setText("Unlock Lesson"); // Lock it in the database
+			} else {
+				database.unlockLesson(lesson.getAuthor(), id); // Unlock the data in the database
+				ViewLessonsHome.lockLessonButton.setText("Lock Lesson");
 			}
 			
+//			if (ViewLessonsHome.lockLessonButton.getText() == "Lock Lesson") {
+//				ViewLessonsHome.lockLessonButton.setText("Unlock Lesson");	
+//			database.lockLesson(lesson.getAuthor(), id); //Update the data in the database
+//			lesson.setIsLessonLocked(true); //updates in the LessonsLearned
+//			
+//			 return;
+//			} else if (ViewLessonsHome.lockLessonButton.getText() == "Unlock Lesson") {
+//				ViewLessonsHome.lockLessonButton.setText("Lock Lesson");	
+//				database.unlockLesson(lesson.getAuthor(), id); //Update the data in the database
+//				lesson.setIsLessonLocked(false); //updates in the LessonsLearned
+//			}
+			
+			
+		}
+		
+		protected static void lockButtonStatus() {
+			String selectedRow = ViewLessonsHome.list.getSelectionModel().getSelectedItem(); // this line is what gets the selected row String.
+			
+			// if the user does not have a lesson selected - just prompt them to select one.
+			if (selectedRow == null) {
+				ViewLessonsHome.lockLessonButton.setText("Lock Lesson");
+				return;
+			}
+			
+			// Rows in the form of "[title] (ID: [id])"
+			int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
+			int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring
+			int id = Integer.parseInt(selectedRow.substring(start, end)); // parse the substring which returns the ID value in a string (into an integer)
+				
+			LessonsLearned lesson = database.getLessonByID(id);	
+						
+			if (lesson.getIsLessonLocked()) {
+				ViewLessonsHome.lockLessonButton.setText("Unlock Lesson");
+			} else {
+				ViewLessonsHome.lockLessonButton.setText("Lock Lesson");
+			}
 			
 		}
 	

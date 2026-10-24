@@ -206,7 +206,7 @@ public class LessonsLearned {
 	public void setIsDescriptionLocked(boolean isDescriptionLocked) {this.isDescriptionLocked = isDescriptionLocked;}
 	
 	/** @param isLessonLocked {@code true} to lock the lesson */
-	public void setIsLessonLocked(boolean isDescriptionLocked) {this.isDescriptionLocked = isDescriptionLocked;}
+	public void setIsLessonLocked(boolean isLessonLocked) {this.isLessonLocked = isLessonLocked;}
 	
 	// VALIDATION:
 	

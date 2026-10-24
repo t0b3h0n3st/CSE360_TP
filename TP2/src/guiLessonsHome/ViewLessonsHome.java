@@ -65,11 +65,11 @@ public class ViewLessonsHome {
 	protected static Button deleteButton = new Button("Delete Lesson");
 	protected static Button returnButton = new Button("Return");
 	
-	//TP2 Button
+	// [IVAN] TP2 Lock Lesson Button
 	protected static Button lockLessonButton = new Button("Lock Lesson");
 	
 	// ALERTS:
-	protected static Alert lockAlert = new Alert(AlertType.INFORMATION);
+	protected static Alert lockAlert = new Alert(AlertType.INFORMATION); // [HARRISON]: added this for error message with lock feature
 	protected static Alert deleteAlert = new Alert(AlertType.INFORMATION);
 	protected static Alert deleteConfirm = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
 	protected static Alert viewAlert = new Alert(AlertType.INFORMATION);
@@ -92,37 +92,43 @@ public class ViewLessonsHome {
 		if (theView == null) theView = new ViewLessonsHome();        // Instantiate singleton if needed
 		theStage = ps;
 		theUser = user;
-		
+
 		userLabel.setText("User: " + theUser.getUserName());
-		
-		// TP2: Set buttons based on the current role
-		if (applicationMain.FoundationsMain.activeHomePage == 3) {
-		    createButton.setVisible(false);
-		    viewButton.setText("View Lesson");
-		}
-		else {
-		    createButton.setVisible(true);
-		    viewButton.setText("View Lesson");
-		}
-		
 		
 		LessonsLearnedCollection lessonsCollection;
 		
+		// USER IS A CURATOR:
 		if (theDatabase.isCurator(theUser.getUserName())) {
+			// MAKE THE CORRESPONDING BUTTONS VISIBLE / NOT :
+			createButton.setVisible(false); // [ANGEL] 
+			lockLessonButton.setVisible(true); // [IVAN]
+			
 			// IF CURATOR : RETRIEVE ALL LESSONS, regardless of author name.
 		    lessonsCollection = theDatabase.getAllLessons();
 		}
+		// USER IS NOT A CURATOR (CONTRIBUTOR as of TP2)
 		else {
+			// MAKE THE CORRESPONDING BUTTONS VISIBLE / NOT :
+			createButton.setVisible(true);
+			lockLessonButton.setVisible(false);
+			
 			// RETRIEVE LESSON COLLECTION BASED ON THE AUTHOR: (since contributors can only see their own work, the contributor name):
 		    lessonsCollection = theDatabase.getLessonByAuthor(theUser.getUserName());
 		}
 		
+		// Fill the list with the corresponding lessonCollection list. it will either be all or by author.
 		fillList(list, lessonsCollection.getLessons());
+		
+		// if you go onto a different page and go back, it would track the previous state, even if no row was selected
+		// this just refreshes it to its default state on each return to the page.
+		list.getSelectionModel().clearSelection();
+		lockLessonButton.setText("Lock Lesson");
+		
 		
 		// if the list view is empty (user has not created anything), prompt a message:
 		if (list.getItems().isEmpty()) {
 			
-			// added this nice condition : will display a different helpful message to curators vs contributor if lessons list is empty.
+			// [HARRISON] added this nice condition : will display a different helpful message to curators vs contributor if lessons list is empty.
 			if (theDatabase.isCurator(theUser.getUserName())) {
 				message.setText("No contributor has created a lesson yet, so there are no lessons to view.");
 			}
@@ -134,15 +140,6 @@ public class ViewLessonsHome {
 			message.setText("");
 		}
 
-		
-		//TP2, For lock button and for which list is displayed depending on the role
-		if(user.getCuratorRole()) {
-		lockLessonButton.setVisible(true);
-		} else {
-		lockLessonButton.setVisible(false);
-		}
-		//
-		
 	   	theStage.setTitle("Lessons Learned Home");
     	theStage.setScene(theScene);
     	theStage.show();
@@ -193,6 +190,12 @@ public class ViewLessonsHome {
     	deleteButton.setOnAction((_) -> {ControllerLessonsHome.performDeletion();}); // DELETE BUTTON:
     	lockLessonButton.setOnAction((_) -> {ControllerLessonsHome.performLessonLock();}); // Lock Button:
     	returnButton.setOnAction((_) -> {ControllerLessonsHome.performReturn(); }); // RETURN TO HOME:
+    	
+    	// LIST VIEW LISTENER:
+    	// not too sure exactly - but it basically observes whenever there is a click on the list view
+    	list.setOnMouseClicked(e -> {
+    		ControllerLessonsHome.lockButtonStatus();
+    	});
 
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
     	theRootPane.getChildren().addAll(topLabel, createButton, viewButton, lockLessonButton, deleteButton, returnButton, userLabel, message, list);
