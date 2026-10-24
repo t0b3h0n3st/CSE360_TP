@@ -50,6 +50,7 @@ public class ControllerViewLesson {
 		if (curatorText == null) {
 			curatorText = "";
 		}
+		String originalCuratorText = curatorText;
 		String curatorTextErr = "";
 		
 		String author = lesson.getAuthor(); // preset by whoever made it:
@@ -62,11 +63,13 @@ public class ControllerViewLesson {
 		// IF THEY ARE A CURATOR: check the curator info text.
 		if (database.isCurator(theUser.getUserName())) { 
 		    curatorText = ViewViewLesson.curatorInfoText.getText().trim();
-		    curatorTextErr = ModelViewLesson.validateCuratorText(curatorText);
+		    // Curator notes are optional; validate them when provided.
+		    if (!curatorText.isEmpty())
+		        curatorTextErr = ModelViewLesson.validateCuratorText(curatorText);
 		}
 		
 		// check for an error:
-		if (!titleErr.equals("") || !textErr.equals("")) {
+		if (!titleErr.equals("") || !textErr.equals("") || !curatorTextErr.equals("")) {
 			// display an alert:
 			ViewViewLesson.saveAlert.setContentText(titleErr + "\n" + textErr + "\n" + curatorTextErr);
 			ViewViewLesson.saveAlert.showAndWait();
@@ -75,7 +78,7 @@ public class ControllerViewLesson {
 		
 		// if it was the same as original, then dont save and show alert:
 		// updated condition to make it so if they dont update the category too, it doesnt count as a change:
-		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text) && lesson.getCategory() == category && lesson.getCuratorAdditionalInformation().trim().equals(curatorText)) {
+		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text) && lesson.getCategory() == category && originalCuratorText.trim().equals(curatorText)) {
 			ViewViewLesson.saveAlert.setContentText("You did not make any changes, so there is no need to save.");
 			ViewViewLesson.saveAlert.showAndWait();
 			return;
