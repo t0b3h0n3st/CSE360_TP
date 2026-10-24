@@ -135,6 +135,9 @@ public class ControllerAdminHome {
 	        message.toString(),
 	        ButtonType.OK
 	    ).showAndWait();
+	    
+	    // helpful for printing codes in the console:
+	    System.out.println(message);
 	}
 	
 	/**********

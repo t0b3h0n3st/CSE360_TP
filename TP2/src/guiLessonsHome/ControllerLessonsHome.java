@@ -134,6 +134,14 @@ public class ControllerLessonsHome {
 	//TP2 Lock Lesson Function
 		protected static void performLessonLock() {
 			String selectedRow = ViewLessonsHome.list.getSelectionModel().getSelectedItem(); // this line is what gets the selected row String.
+			
+			// if the user does not have a lesson selected - just prompt them to select one.
+			if (selectedRow == null) {
+				ViewLessonsHome.lockAlert.setContentText("You must first select a lesson in order to lock it.");
+				ViewLessonsHome.lockAlert.showAndWait();
+				return;
+			}
+			
 			// Rows in the form of "[title] (ID: [id])"
 					int start = selectedRow.lastIndexOf("(ID: ") + 5; // get the last index of the opening parantheses, then the int value is 5 indices more
 					int end = selectedRow.lastIndexOf(")"); // get the index of the last closing parantheses, we will not include this in the substring

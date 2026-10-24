@@ -69,6 +69,7 @@ public class ViewLessonsHome {
 	protected static Button lockLessonButton = new Button("Lock Lesson");
 	
 	// ALERTS:
+	protected static Alert lockAlert = new Alert(AlertType.INFORMATION);
 	protected static Alert deleteAlert = new Alert(AlertType.INFORMATION);
 	protected static Alert deleteConfirm = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
 	protected static Alert viewAlert = new Alert(AlertType.INFORMATION);
@@ -175,6 +176,7 @@ public class ViewLessonsHome {
     	list.setFixedCellSize(28); 
     	
     	// ALERTS:
+    	lockAlert.setTitle("Lesson Lock");
     	deleteAlert.setTitle("Lesson Deletion");
     	deleteAlert.setHeaderText("Deletion Result");
     	viewAlert.setTitle("View Lesson");

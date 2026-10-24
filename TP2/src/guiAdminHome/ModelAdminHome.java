@@ -100,7 +100,7 @@ public class ModelAdminHome {
 			return emailAddressErrorMessage;
 		}
 		email_running = true;						// Start the loop
-		System.out.println("\nCurrent Final Input  Next  DomainName\nState   State Char  State  Size");
+		// DEBUGGING: System.out.println("\nCurrent Final Input  Next  DomainName\nState   State Char  State  Size");
 
 		// The Finite State Machines continues until the end of the input is reached or at some 
 		// state the current character does not match any valid transition to a next state
@@ -196,7 +196,7 @@ public class ModelAdminHome {
 			}
 			
 			if (email_running) {
-				displayDebuggingInfo();
+				// DEBUGGING: displayDebuggingInfo();
 				// When the processing of a state has finished, the FSM proceeds to the next character
 				// in the input and if there is one, it fetches that character and updates the 
 				// currentChar.  If there is no next character the currentChar is set to a blank.
@@ -210,9 +210,9 @@ public class ModelAdminHome {
 			// Should the FSM get here, the loop starts again
 
 		}
-		displayDebuggingInfo();
+		// DEBUGGING: displayDebuggingInfo();
 		
-		System.out.println("The loop has ended.");
+		// DEBUGGING: System.out.println("The loop has ended.");
 
 		emailAddressIndexofError = email_currentCharNdx;		// Copy the index of the current character;
 		

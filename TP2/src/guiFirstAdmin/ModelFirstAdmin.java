@@ -113,7 +113,7 @@ public class ModelFirstAdmin {
 		userNameRecognizerInput = input;	// Save a copy of the input
 		running = true;						// Start the loop
 		nextState = -1;						// There is no next state
-		System.out.println("\nCurrent Final Input  Next\nState   State Char  State  Size");
+		// DEBUGGING: System.out.println("\nCurrent Final Input  Next\nState   State Char  State  Size");
 		
 		// This is the place where semantic actions for a transition to the initial state occur
 		
@@ -219,7 +219,7 @@ public class ModelFirstAdmin {
 			}
 			
 			if (running) {
-				displayDebuggingInfo();
+				// DEBUGGING: displayDebuggingInfo();
 				// When the processing of a state has finished, the FSM proceeds to the next
 				// character in the input and if there is one, it fetches that character and
 				// updates the currentChar.  If there is no next character the currentChar is
@@ -238,9 +238,9 @@ public class ModelFirstAdmin {
 			// Should the FSM get here, the loop starts again
 	
 		}
-		displayDebuggingInfo();
+		// DEBUGGING: displayDebuggingInfo();
 		
-		System.out.println("The loop has ended.");
+		// DEBUGGING: System.out.println("The loop has ended.");
 		
 		// When the FSM halts, we must determine if the situation is an error or not.  That depends
 		// of the current state of the FSM and whether or not the whole string has been consumed.
@@ -338,7 +338,7 @@ public class ModelFirstAdmin {
 				if (errMessage != "") {
 					
 					// Since the output is not empty, at least one requirement have not been satisfied.
-					System.out.println(errMessage);			// Display the message to the console
+					// DEBUGGING: System.out.println(errMessage);			// Display the message to the console
 					
 				
 					
@@ -485,31 +485,31 @@ public class ModelFirstAdmin {
 			// The Directed Graph simulation continues until the end of the input is reached or at some
 			// state the current character does not match any valid transition
 			while (running) {
-				displayInputState();
+				// DEBUGGING: displayInputState();
 				// The cascading if statement sequentially tries the current character against all of
 				// the valid transitions, each associated with one of the requirements
 				if (currentChar >= 'A' && currentChar <= 'Z') {
-					System.out.println("Upper case letter found");
+					// DEBUGGING: System.out.println("Upper case letter found");
 					foundUpperCase = true;
 				} else if (currentChar >= 'a' && currentChar <= 'z') {
-					System.out.println("Lower case letter found");
+					// DEBUGGING: System.out.println("Lower case letter found");
 					foundLowerCase = true;
 				} else if (currentChar >= '0' && currentChar <= '9') {
-					System.out.println("Digit found");
+					// DEBUGGING: System.out.println("Digit found");
 					foundNumericDigit = true;
 				} else if ("~`!@#$%^&*()_-+={}[]|\\:;\"'<>,.?/".indexOf(currentChar) >= 0) {
-					System.out.println("Special character found");
+					// DEBUGGING: System.out.println("Special character found");
 					foundSpecialChar = true;
 				} else {
 					passwordIndexofError = currentCharNdx;
 					return "*** Error *** An invalid character has been found!";
 				}
 				if (currentCharNdx >= 7) {
-					System.out.println("At least 8 characters found");
+					// DEBUGGING: System.out.println("At least 8 characters found");
 					foundLongEnough = true;
 				}
 				if (currentCharNdx > 32) {
-		                System.out.println("More than 32 characters found");
+					// DEBUGGING: System.out.println("More than 32 characters found");
 		                foundTooLong = true;
 		        } 
 				
@@ -520,7 +520,7 @@ public class ModelFirstAdmin {
 				else
 					currentChar = input.charAt(currentCharNdx);
 				
-				System.out.println();
+				// DEBUGGING: System.out.println();
 			}
 			
 			// Construct a String with a list of the requirement elements that were found.
