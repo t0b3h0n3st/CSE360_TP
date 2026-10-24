@@ -81,6 +81,19 @@ public class LessonsLearned {
 	    this.curatorAdditionalInformation = curatorAdditionalInformation;
 	}
 	
+	public LessonsLearned(String author, String title, String text, Category category, String CurInfo, int id, boolean titleLocked, boolean descriptionLocked, boolean lessonLocked) {
+		this.author = author;
+		this.lessonTitle = title;
+		this.lessonText = text; 
+		this.category = category;
+		this.curatorAdditionalInformation = CurInfo;
+		this.lessonID = id; 
+		this.isTitleLocked = titleLocked;
+		this.isDescriptionLocked = descriptionLocked;
+		this.isLessonLocked = lessonLocked;
+		
+	}
+	
 	/**
 	 * Creates a lesson with its database ID specified. This is used when reading an existing
 	 * lesson back from the database, where the ID is already known. Both lock flags default
