@@ -49,6 +49,17 @@ public class ControllerCuratorHome {
 	protected static void performUpdate () {
 		guiUserUpdate.ViewUserUpdate.displayUserUpdate(ViewCuratorHome.theStage, ViewCuratorHome.theUser);
 	}	
+	
+	/**
+	 * <p> Method: performLessons() </p>
+	 *
+	 * <p> Description: This method directs the Curator to the
+	 * Lessons Learned Home Page where lessons can be viewed and managed. </p>
+	 */
+	protected static void performLessons() {
+	    guiLessonsHome.ViewLessonsHome.displayLessonsHome(
+	        ViewCuratorHome.theStage, ViewCuratorHome.theUser);
+	}
 
 	/**********
 	 * <p> Method: performLogout() </p>

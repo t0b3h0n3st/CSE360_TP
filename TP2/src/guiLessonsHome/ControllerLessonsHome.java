@@ -1,6 +1,7 @@
 package guiLessonsHome;
 
 import guiContributor.ViewContributorHome;	
+import guiCurator.ViewCuratorHome;
 import guiCreateLesson.ViewCreateLesson;
 import guiDeleteUser.ViewDeleteUser;
 import guiViewLesson.ViewViewLesson;
@@ -157,12 +158,18 @@ public class ControllerLessonsHome {
 		}
 	
 	/**
-	 * Returns to the Contributor Home page.
-	 * <p>
-	 * Note: this always returns to the contributor page, even when the user arrived as a
-	 * curator.
+	 * Returns to the appropriate home page based on the user's active role.
+	 * Curators return to the Curator Home page, while Contributors return
+	 * to the Contributor Home page.
 	 */
 	protected static void performReturn() {
-		ViewContributorHome.displayContributorHome(ViewLessonsHome.theStage, ViewLessonsHome.theUser);
+	    if (applicationMain.FoundationsMain.activeHomePage == 3) {
+	        ViewCuratorHome.displayCuratorHome(
+	            ViewLessonsHome.theStage, ViewLessonsHome.theUser);
+	    }
+	    else {
+	        ViewContributorHome.displayContributorHome(
+	            ViewLessonsHome.theStage, ViewLessonsHome.theUser);
+	    }
 	}
-}
+}	

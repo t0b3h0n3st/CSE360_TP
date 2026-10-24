@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import database.Database;
 import entityClasses.LessonsLearned;
+import entityClasses.Category;
+import entityClasses.Category;
 import entityClasses.User;
 import guiCreateLesson.ModelCreateLesson;
 import guiCreateLesson.ViewCreateLesson;
@@ -41,6 +43,7 @@ public class ControllerViewLesson {
 		String title = ViewViewLesson.titleText.getText().trim();
 		String text = ViewViewLesson.lessonText.getText().trim();
 		String author = lesson.getAuthor(); // preset by whoever made it:
+		Category category = ViewViewLesson.category.getValue(); // get the value selected in the combo box:
 		
 		// VALIDATE ALL TEXT FIELDS NEEDED (LENGTH CHECKS)
 		String titleErr = ModelCreateLesson.validateTitle(title);
@@ -55,7 +58,8 @@ public class ControllerViewLesson {
 		}
 		
 		// if it was the same as original, then dont save and show alert:
-		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text)) {
+		// updated condition to make it so if they dont update the category too, it doesnt count as a change:
+		if (lesson.getLessonTitle().trim().equals(title) && lesson.getLessonText().trim().equals(text) && lesson.getCategory() == category) {
 			ViewViewLesson.saveAlert.setContentText("You did not make any changes, so there is no need to save.");
 			ViewViewLesson.saveAlert.showAndWait();
 			return;
@@ -71,7 +75,7 @@ public class ControllerViewLesson {
 		}
 		
 		// create a new Lessons object out of the data extracted from text fields that they updated. 
-		LessonsLearned editedLesson = new LessonsLearned(author, title, text);
+		LessonsLearned editedLesson = new LessonsLearned(author, title, text, category);
 		
 		if (database.updateLesson(lesson.getLessonID(), editedLesson)) {
 			ViewViewLesson.saveAlert.setContentText("Changes changed successfully! Returning to Lessons Learned Home.");
@@ -83,6 +87,34 @@ public class ControllerViewLesson {
 			ViewViewLesson.saveAlert.showAndWait();
 		}
 	}
+	
+	/**
+	 * Saves the additional information entered by the Curator.
+	 *
+	 * @param lesson the lesson being updated
+	 */
+	protected static void performSaveCuratorInfo(LessonsLearned lesson) {
+
+	    String curatorInfo =
+	            ViewViewLesson.curatorInfoText.getText().trim();
+
+	    if (database.updateCuratorAdditionalInformation(
+	            lesson.getLessonID(), curatorInfo)) {
+
+	        lesson.setCuratorAdditionalInformation(curatorInfo);
+
+	        ViewViewLesson.saveAlert.setContentText(
+	                "Curator additional information saved successfully.");
+	        ViewViewLesson.saveAlert.showAndWait();
+	    }
+	    else {
+	        ViewViewLesson.saveAlert.setContentText(
+	                "There was an error with the database. Please try again.");
+	        ViewViewLesson.saveAlert.showAndWait();
+	    }
+	}
+	
+	
 	
 	//TP2
 		// I should also buttons to remove the lock
@@ -104,7 +136,10 @@ public class ControllerViewLesson {
 				database.lockTitle(author, id); //Update the data in the database
 			lesson.setIsTitleLocked(true); //updates in the LessonsLearned
 			
-			ViewViewLesson.titleText.setEditable(false);
+			// [HARRISON]:
+			// on the first time locking, make it such that it still allows curators to edit it.
+			if (!database.isCurator(ViewViewLesson.theUser.getUserName()))
+				ViewViewLesson.titleText.setEditable(false);
 			
 			ViewViewLesson.lockTitleButton.setText("Unlock Title");
 			
@@ -147,6 +182,9 @@ public class ControllerViewLesson {
 				database.lockDescription(author, id); //Update the data in the database
 			lesson.setIsDescriptionLocked(true); //updates in the LessonsLearned
 			
+			// [HARRISON]:
+			// on the first time locking, make it such that it still allows curators to edit it.
+				if (!database.isCurator(ViewViewLesson.theUser.getUserName()))
 			ViewViewLesson.lessonText.setEditable(false);
 			
 			ViewViewLesson.lockDescriptionButton.setText("Unlock Description");

@@ -18,6 +18,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import database.Database;
+import entityClasses.Category;
 import entityClasses.User;
 import guiAdminHome.ControllerAdminHome;
 import guiDeleteUser.ControllerDeleteUser;
@@ -74,6 +75,14 @@ public class ViewCreateLesson {
 	protected static Alert resultMsg = new Alert(AlertType.INFORMATION);
 	protected static Alert alertConfirmation = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
 	
+	/* ---------------------------------------------
+	 * adding in combo box for category selection:
+	   --------------------------------------------- */
+	// COMBO BOX (Category):
+	protected static Label categoryLabel = new Label("Select a category: ");
+	protected static ComboBox <Category> category;
+	
+	
 	// DISPLAYING THE STAGE WITH THE NEW SCENE:
 		/**
 		 * Displays the Create Lesson page on the given stage.
@@ -102,19 +111,26 @@ public class ViewCreateLesson {
     	// LABEL UI:
     	setupLabelUI(topLabel, "Arial", 28, width, Pos.CENTER, 0, 15);
     	setupLabelUI(titleLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 62);
-    	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 105);
+    	setupLabelUI(categoryLabel, "Arial", 18, 150, Pos.CENTER_RIGHT, 100, 102);
+    	setupLabelUI(lessonsLabel, "Arial", 18, width, Pos.CENTER, 0, 150);
     	
     	// TEXT FIELD UI:
-    	setupTextUI(lessonTitle, "Arial", 16, 400, Pos.CENTER_LEFT, 280, 60, true);
+    	setupTextUI(lessonTitle, "Arial", 16, 350, Pos.CENTER_LEFT, 280, 60, true);
+    	lessonTitle.setPromptText("Enter a title below:");
     	
+		// COMBO BOX:
+	    category = new ComboBox<>();
+	    category.getItems().addAll(Category.values());
+	    category.setValue(Category.General); // default should be "General"
+		setupComboBoxUI(category, "Dialog", 16, 250, 280, 100);
     	
     	// TEXT AREA UI:
     	lessonText.setPromptText("Write your lessons learned below:");
     	lessonText.setWrapText(true);
         lessonText.setPrefWidth(500);
-        lessonText.setPrefHeight(340);
+        lessonText.setPrefHeight(300);
     	lessonText.setLayoutX(150);
-    	lessonText.setLayoutY(140);
+    	lessonText.setLayoutY(180);
     	
     	// BUTTON UI:
     	setupButtonUI(confirmButton, "Dialog", 18, 100, Pos.CENTER, 450, 540);
@@ -127,13 +143,15 @@ public class ViewCreateLesson {
 		// confirmation alert
 		alertConfirmation.setTitle("Confirmation");
 		alertConfirmation.setHeaderText("Are You Sure?");
+		
+
     	
     	// BUTTON ACTIONS:
     	confirmButton.setOnAction((_) -> {ControllerCreateLesson.confirmCreation(theUser);}); // CREATE BUTTON:
     	returnButton.setOnAction((_) -> {ControllerCreateLesson.performReturn(); }); // RETURN TO HOME:
     	
     	// ADD ALL THE UI COMPONENTS TO THE SCENE:
-    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, confirmButton, returnButton, lessonTitle, lessonText);
+    	theRootPane.getChildren().addAll(topLabel, titleLabel, lessonsLabel, categoryLabel, category, confirmButton, returnButton, lessonTitle, lessonText);
 	}
 	
 	
@@ -190,5 +208,13 @@ public class ViewCreateLesson {
 		t.setLayoutY(y);		
 		t.setEditable(e);
 	}	
+	
+	protected static void setupComboBoxUI(ComboBox <Category> c, String ff, double f, double w,
+			double x, double y){
+		c.setStyle("-fx-font: " + f + " " + ff + ";");
+		c.setMinWidth(w);
+		c.setLayoutX(x);
+		c.setLayoutY(y);
+	}
 		
 }
