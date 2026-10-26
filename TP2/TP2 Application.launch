@@ -1,16 +1,19 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="TP2" />
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="applicationMain.FoundationsMain" />
-    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="FoundationsF26" />
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:/TP2}" />
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--add-modules javafx.controls --enable-native-access=javafx.graphics -Dfoundation.db.url=jdbc:h2:./TP2Database" />
-    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="false" />
-    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false" />
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/TP2/src/applicationMain/FoundationsMain.java" />
+        <listEntry value="/TP2/src/applicationMain/FoundationsMain.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-        <listEntry value="1" />
+        <listEntry value="1"/>
     </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="applicationMain.FoundationsMain"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="FoundationsF26"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="TP2"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--add-modules javafx.controls --enable-native-access=javafx.graphics -Dfoundation.db.url=jdbc:h2:./TP2Database"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:/TP2}"/>
 </launchConfiguration>

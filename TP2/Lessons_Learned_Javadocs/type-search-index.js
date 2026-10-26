@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"database","l":"Database"},{"p":"entityClasses","l":"LessonExperience"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"entityClasses","l":"Category","k":"9"},{"p":"database","l":"Database"},{"p":"entityClasses","l":"LessonExperience"},{"p":"entityClasses","l":"LessonsLearned"},{"p":"entityClasses","l":"LessonsLearnedCollection"},{"p":"entityClasses","l":"User"}];updateSearchResults();

@@ -146,7 +146,7 @@ public class ViewContributorHome {
 	 * each GUI object.</p>
 	 * 
 	 * This is a singleton and is only performed once.  Subsequent uses fill in the changeable
-	 * fields using the displayCuratorHome method.</p>
+	 * fields using the displayCuratorHome method.
 	 * 
 	 */
 	private ViewContributorHome() {

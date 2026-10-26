@@ -281,7 +281,7 @@ public class ViewViewLesson {
 	/**********
 	 * Private local method to initialize the standard fields for a text input field
 	 * 
-	 * @param b		The TextField object to be initialized
+	 * @param t		The TextField object to be initialized
 	 * @param ff	The font to be used
 	 * @param f		The size of the font to be used
 	 * @param w		The width of the Button

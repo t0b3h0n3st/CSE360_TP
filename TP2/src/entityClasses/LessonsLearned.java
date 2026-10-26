@@ -102,10 +102,7 @@ public class LessonsLearned {
 	 * @param author the username of the contributor who wrote the lesson
 	 * @param lessonTitle the title of the lesson
 	 * @param lessonText the body text of the lesson
-	 * @param category the category of the lesson
 	 * @param lessonID the unique ID assigned to the lesson by the database
-	 * @param isTitleLocked {@code true} if the title is locked against editing
-	 * @param isDescriptionLocked {@code true} if the description is locked against editing
 	 * @param isLessonLocked {@code true} if the lesson is locked
 	 */
 
@@ -116,8 +113,6 @@ public class LessonsLearned {
 		this.lessonTitle = lessonTitle;
 		this.lessonText = lessonText;
 		this.lessonID = lessonID;
-		this.isTitleLocked = isTitleLocked;
-		this.isDescriptionLocked = isDescriptionLocked;
 		this.isLessonLocked = isLessonLocked;
 	}
 	
