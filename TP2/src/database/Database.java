@@ -88,13 +88,14 @@ public class Database {
 	 * value of {@code false}. A {@link SQLException} is caught and its stack trace printed,
 	 * so a failed insert is not reported to the caller.
 	 *
+	 *@return true if the lesson is successfully added.
 	 * @param lesson the lesson to store
 	 */
 		
 	/*
 	 * UPDATE TO ADJUST FOR THE NEW PROPERTIES:
 	 */
-		public void addLesson(LessonsLearned lesson) {
+		public boolean addLesson(LessonsLearned lesson) {
 			String addQuery = "INSERT INTO lessons (author, title, text, category, curatorAdditionalInformation) " + "VALUES (?, ?, ?, ?, ?)";
 			// see if we can execute the query: 
 			try (PreparedStatement pstmt = connection.prepareStatement(addQuery)) {
@@ -106,10 +107,11 @@ public class Database {
 				pstmt.setString(5,  lesson.getCuratorAdditionalInformation()); // added this in : need to store the curator information too.
 				
 				// execute the query:
-				pstmt.executeUpdate(); // 
+				return pstmt.executeUpdate() > 0;
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			}
 		}
 		
