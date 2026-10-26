@@ -16,12 +16,19 @@ import guiLessonsHome.ViewLessonsHome;
  * @version 2.0
  */
 public class ContributorTestbed {
+	
+	/** 
+	 * Private constructor is not used.
+	 */
+	private ContributorTestbed() {}
+	
 	private static Database database;
+	
 	
 	/**
 	 * The main method is where all of the test cases are computed. It utilizes some outer methods too.
-	 * @param args
-	 * @throws SQLException
+	 * @param args command line arguments
+	 * @throws SQLException if database connection or operation fails
 	 */
 	public static void main (String args[]) throws SQLException {
 		// no idea how it works, but it's used in our TP1 database testbed. i guess it separates it from our main database, so it serves as a temp
@@ -135,7 +142,7 @@ public class ContributorTestbed {
 	} 
 	
 	/**
-	 * testDeleteLockedLesson is a test method that tests whether a method can be deleted or not based on whether it contains any locked fields.
+	 * testDeleteLockedLesson is a test method that tests whether a lesson can be deleted or not based on whether it contains any locked fields.
 	 * @param lesson the lesson to be deleted from the database
 	 * @return {@code true} if the lesson is deleted, {@code false} if the lesson could not be deleted due to a field being locked / the lesson not existing in the database.
 	 */
@@ -155,7 +162,7 @@ public class ContributorTestbed {
 	
 	/**
 	 * dispLessonList is a helper method that takes a LessonsLearnedCollection and prints out all of its lessons and their attributes
-	 * @param list
+	 * @param list input LessonsLearnedCollection to iterate through its lessons
 	 */
 	public static void dispLessonList(LessonsLearnedCollection list) {
 		List<LessonsLearned> temp = list.getLessons();
@@ -166,7 +173,7 @@ public class ContributorTestbed {
 	
 	/**
 	 * line is the same helper method borrowed from LessonsTestbed.
-	 * @param count
+	 * @param count the number of times to repeat the line
 	 */
 	public static void line(int count) {
 		for (int i = 0; i < count; i++) {

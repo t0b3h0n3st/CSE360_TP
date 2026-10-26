@@ -21,14 +21,19 @@ import entityClasses.LessonsLearnedCollection;
 public class LessonsTestbed {
 	
 	/**
+	 * Constructor is not used
+	 */
+	private LessonsTestbed() {}
+	
+	/**
 	 * A database variable for this whole class. This is created temporarily in memory
 	 */
 	private static Database database;
 	
 	/**
 	 * <p> The main method runs all of the test methods that I have created.
-	 * @param args
-	 * @throws SQLException
+	 * @param args command line arguments
+	 * @throws SQLException if a database connection or operation fails
 	 */
 	public static void main (String args[]) throws SQLException {
 		// no idea how it works, but it's used in our TP1 database testbed. i guess it separates it from our main database, so it serves as a temp
@@ -157,6 +162,7 @@ public class LessonsTestbed {
 	
 	/**
 	 * <p> testGetLessonByAuthor returns a LessonsLearnedCollection of all the lessons in the database created by a specific user.</p>
+	 * @param name the author to filter lessons created by
 	 * @return a LessonsLearnedCollection of all lessons made by that author, or null if there is no lessons created by that author.
 	 */
 	
@@ -273,15 +279,15 @@ public class LessonsTestbed {
 	
 	/**
 	 * <p> createLesson is a simple helper method for initializing a LessonsLearned object
-	 * @param authors
-	 * @param title
-	 * @param text
-	 * @param category
-	 * @param curInfo
-	 * @param id
-	 * @param titleLocked
-	 * @param descriptionLocked
-	 * @param lessonLocked
+	 * @param author the lesson author
+	 * @param title the lesson title
+	 * @param text the lesson contributor text
+	 * @param category the lesson's category
+	 * @param curInfo the lesson's curator additional information
+	 * @param id the lesson's unique identifier
+	 * @param titleLocked if the lesson's title is locked
+	 * @param descriptionLocked if the lesson's description is locked
+	 * @param lessonLocked if the lesson itself is locked
 	 * @return the LessonsLearned object 
 	 */
 	

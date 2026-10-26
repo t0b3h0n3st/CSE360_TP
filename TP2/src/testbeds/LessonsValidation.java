@@ -14,16 +14,23 @@ import guiCreateLesson.ModelCreateLesson;
  */
 
 public class LessonsValidation {
-
+		
+	/**
+	 * Constructor is not used in this program.
+	 */
+		private LessonsValidation() {}
+		
 		static int numPassed = 0;	// Counter of the number of passed tests
 		static int numFailed = 0;	// Counter of the number of failed tests
 		
 		static String title = "title";
 		static String text = "text";
 
+
 		/**
 		 * This mainline displays a header to the console, performs a sequence of
 		 * test cases, and then displays a footer with a summary of the results
+		 * @param args the command line arguments
 		 */
 		
 		public static void main(String[] args) {
