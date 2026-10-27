@@ -66,7 +66,7 @@ public class ControllerViewLesson {
 		}
 		
 		// check for an error:
-		if (!titleErr.equals("") || !textErr.equals("")) {
+		if (!titleErr.equals("") || !textErr.equals("") || !curatorTextErr.equals("")) {
 			// display an alert:
 			ViewViewLesson.saveAlert.setContentText(titleErr + "\n" + textErr + "\n" + curatorTextErr);
 			ViewViewLesson.saveAlert.showAndWait();

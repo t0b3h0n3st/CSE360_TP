@@ -138,7 +138,8 @@ public class ContributorTestbed {
 		allLessons = database.getAllLessons();
 		dispLessonList(allLessons);
 		
-		
+		database.lockTitle(lesson4.getAuthor(), lesson4.getLessonID());
+
 	} 
 	
 	/**

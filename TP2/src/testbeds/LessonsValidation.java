@@ -73,12 +73,13 @@ public class LessonsValidation {
 		}
 		
 		/**
-		 * <p>This method sets up the input value for the test from the input parameters,
-		 * displays test execution information, invokes precisely the same recognizer
-		 * that the interactive JavaFX mainline uses, interprets the returned value,
-		 * and displays the interpreted result.</p>
+		 * performTestCase this method performs test cases with given inputs strings.
+		 * @param testCase the number of the test
+		 * @param inputText the input string
+		 * @param inputType whether it's a title or a text that we're validating
+		 * @param expectedPass the expected result to be compared. (pos/neg test)
 		 */
-		private static void performTestCase(int testCase, String inputText, String inputType, boolean expectedPass) {
+		public static void performTestCase(int testCase, String inputText, String inputType, boolean expectedPass) {
 					
 			/************** Display an individual test case header **************/
 			System.out.println("____________________________________________________________________________\n\nPerforming test case for input type : " + inputType);
