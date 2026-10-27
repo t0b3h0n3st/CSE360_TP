@@ -77,13 +77,13 @@ public class ModelViewLesson {
 	
 	public static String validateCuratorText(String input) {
 		final int MAX_LENGTH = 255;
-		final int MIN_LENGTH = 10; // should at least be 10 chars
+		final int MIN_LENGTH = 5; // should at least be 10 chars
 		
 		String msg = "";
 		
 		// EMPTY INPUT:
 		if (input == null || input.isBlank()) {
-			msg = "Curator text cannot be blank. Please enter in text.";
+			msg = "";
 		}
 		
 		// LENGTH TOO LONG:
